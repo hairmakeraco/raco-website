@@ -323,6 +323,12 @@ nav a:hover::after { transform: scaleX(1); }
     text-align: right;
 }
 
+/* ════ M301/P401 GRID ════ */
+.m301-p401-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
 /* ════ STEPS FLOW ════ */
 .steps-flow {
     display: grid;
@@ -1459,6 +1465,11 @@ footer {
     }
     .steps-flow > div:nth-child(even) { display: none !important; }
     .steps-flow > div:nth-child(odd) { text-align: center; width: 100%; }
+
+    /* M301/P401カード縦並び */
+    .m301-p401-grid {
+        grid-template-columns: 1fr !important;
+    }
 }
 
 </style>
@@ -1772,7 +1783,7 @@ footer {
       </p>
 
       <!-- 2カード -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--line);margin-bottom:2px;">
+      <div class="m301-p401-grid" style="gap:2px;background:var(--line);margin-bottom:2px;">
 
         <div class="armada-card card-m fade-in">
           <div class="armada-card-code">M301</div>
