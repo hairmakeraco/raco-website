@@ -1391,23 +1391,57 @@ footer {
    RESPONSIVE
 ════════════════════════════ */
 @media (max-width: 900px) {
-    header { padding: 0 22px; }
+    /* ヘッダー */
+    header { padding: 0 22px; height: 56px; }
     nav { display: none; }
-    .hero-content { padding: 0 28px 72px; }
-    .hero-scroll, .hero-stats { right: 28px; }
+
+    /* ヒーロー */
+    .hero-content { padding: 0 22px 64px; }
+    .hero-tag { font-size: 8px; }
+    .hero-title { font-size: clamp(14px, 2vw, 22px); }
+    .hero-title span { font-size: clamp(52px, 14vw, 80px); }
+    .hero-sub { font-size: 11px; letter-spacing: .1em; }
+    .hero-btns { flex-direction: column; gap: 10px; }
+    .btn-red, .btn-ghost { text-align: center; justify-content: center; padding: 12px 28px; }
+    .hero-scroll { display: none; }
+    .hero-stats { right: 16px; bottom: 64px; gap: 14px; }
+    .hero-stat-num { font-size: 26px; }
+
+    /* コンセプト・トリートメント */
     .concept, .treatment { grid-template-columns: 1fr; }
-    .concept-body, .treatment-body { padding: 64px 28px; border-left: none; border-top: 3px solid var(--red); }
-    .menu-section { padding: 80px 22px; }
+    .concept-img img, .treatment-img img { min-height: 260px; }
+    .concept-body { padding: 56px 22px; border-left: none; border-top: 3px solid var(--red); }
+    .treatment-body { padding: 56px 22px; border-right: none; border-top: 3px solid var(--red); }
+
+    /* 現金バナー */
+    .payment-notice { padding: 20px 22px; flex-direction: column; text-align: center; gap: 10px; }
+    .payment-notice-text { font-size: 15px; }
+
+    /* メニュー */
+    .menu-section { padding: 64px 16px; }
     .menu-grid { grid-template-columns: 1fr; }
     .menu-card.full { grid-column: auto; }
+    .menu-card { padding: 32px 22px; }
+
+    /* ギャラリー */
     .gallery { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
     .gallery-item:first-child { grid-column: auto; grid-row: auto; }
-    .info-strip { flex-wrap: wrap; padding: 0 22px; }
-    .info-item { padding: 18px 22px; border-left: none; }
-    .access-inner { grid-template-columns: 1fr; }
-    .access-section { padding: 80px 22px; }
-    .reserve { padding: 80px 22px; }
-    footer { padding: 44px 22px 28px; grid-template-columns: 1fr; }
+
+    /* インフォ */
+    .info-strip { flex-wrap: wrap; padding: 0 16px; }
+    .info-item { padding: 16px 18px; border-left: none; width: 50%; }
+
+    /* アクセス */
+    .access-inner { grid-template-columns: 1fr; gap: 40px; }
+    .access-section { padding: 64px 22px; }
+
+    /* 予約 */
+    .reserve { padding: 64px 22px; }
+    .reserve-cash { font-size: 13px; padding: 8px 18px; letter-spacing: .1em; }
+    .reserve-btns { flex-direction: column; align-items: center; }
+
+    /* フッター */
+    footer { padding: 40px 22px 28px; grid-template-columns: 1fr; gap: 24px; }
 }
 
 </style>
