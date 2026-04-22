@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>定休日お知らせシート</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN',Meiryo,sans-serif;font-size:14px;color:#1a1a1a;background:#f5f5f0;min-height:100vh}
+.header{background:#fff;border-bottom:1px solid #e8e8e4;padding:14px 16px;position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between}
+.header h1{font-size:16px;font-weight:600;color:#1a1a1a}
+.header-sub{font-size:12px;color:#888;margin-top:2px}
+.badge{font-size:11px;background:#e8f0fe;color:#1a56db;border-radius:10px;padding:2px 8px;font-weight:600}
+.container{max-width:480px;margin:0 auto;padding:12px 14px 180px}
+.hint{font-size:12px;color:#666;text-align:center;padding:8px 0 12px;line-height:1.6}
+.tpl-tabs{display:flex;gap:4px;background:#fff;border-radius:12px;padding:5px;margin-bottom:12px;border:0.5px solid #e0e0d8}
+.tpl-tab{flex:1;padding:10px 4px;background:transparent;border:none;border-radius:8px;font-size:12px;cursor:pointer;color:#666;font-weight:500;-webkit-tap-highlight-color:transparent;transition:background .15s}
+.tpl-tab.active{background:#1a56db;color:#fff;font-weight:600}
+.tpl-tab:not(.active):active{background:#f0f0f0}
+.cal-wrap{background:#fff;border-radius:12px;padding:14px;border:0.5px solid #e0e0d8;margin-bottom:12px}
+.cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.cal-nav{width:36px;height:36px;border:1px solid #ddd;background:#fff;border-radius:10px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;color:#333;-webkit-tap-highlight-color:transparent}
+.cal-nav:active{background:#f0f0f0;transform:scale(.95)}
+.cal-title{font-size:15px;font-weight:600;color:#1a1a1a}
+.cal-today-btn{font-size:11px;background:none;border:1px solid #ddd;border-radius:8px;padding:4px 10px;cursor:pointer;color:#666;margin-left:8px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-dow{font-size:11px;text-align:center;padding:6px 0;font-weight:600;color:#666}
+.cal-dow.sun{color:#d93838}
+.cal-dow.sat{color:#1a56db}
+.cal-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;border-radius:50%;-webkit-tap-highlight-color:transparent;user-select:none;color:#1a1a1a;font-weight:500}
+.cal-cell:active{background:#f0f0f0;transform:scale(.92)}
+.cal-cell.sun{color:#d93838}
+.cal-cell.sat{color:#1a56db}
+.cal-cell.today{outline:2px solid #1a56db;outline-offset:-3px}
+.cal-cell.empty{visibility:hidden}
+.cal-cell.selected{background:#ff3b30;color:#fff!important;font-weight:700}
+.cal-cell.selected.today{outline-color:#ff3b30}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e8e8e4;padding:12px 16px;display:flex;flex-direction:column;gap:8px;max-width:480px;margin:0 auto}
+@media(min-width:480px){.bottom{left:50%;transform:translateX(-50%);right:auto;width:480px}}
+.btn-row{display:flex;gap:8px}
+.btn-gen{flex:1;padding:11px;background:#fff;border:1px solid #ccc;border-radius:10px;font-size:13px;cursor:pointer;color:#333;font-weight:500}
+.btn-gen:active{background:#f5f5f5}
+.btn-copy{flex:1;padding:11px;background:#1a56db;border:none;border-radius:10px;font-size:13px;cursor:pointer;color:#fff;font-weight:600}
+.btn-copy:active{opacity:.85}
+.btn-share{width:100%;padding:11px;background:#06c755;border:none;border-radius:10px;font-size:13px;cursor:pointer;color:#fff;font-weight:600;margin-top:2px}
+.btn-share:active{opacity:.85}
+.btn-reset{width:100%;padding:7px;background:none;border:none;font-size:12px;color:#999;cursor:pointer;text-decoration:underline}
+.toast{font-size:12px;color:#1a7a4a;text-align:center;min-height:15px}
+.preview-wrap{background:#f0f7f4;border:1px solid #c8e6d4;border-radius:10px;padding:12px 14px;margin-bottom:4px}
+.preview-txt{font-size:13px;white-space:pre-wrap;line-height:1.85;color:#1a1a1a;width:100%;min-height:160px;border:1px solid #c8e6d4;border-radius:8px;padding:10px;background:#fff;font-family:inherit;resize:vertical;outline:none}
+.preview-txt:focus{border-color:#1a7a4a}
+.preview-wrap h3{font-size:11px;color:#1a7a4a;font-weight:600;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
+.preview-hint{font-size:10px;color:#888;font-weight:400}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header h1" style="font-size:16px;font-weight:600">定休日お知らせシート</div>
+    <div class="header-sub">Hair make Raco</div>
+  </div>
+  <span class="badge" id="total-badge">0日選択</span>
+</div>
+
+<div class="container">
+  <div class="tpl-tabs">
+    <button class="tpl-tab active" data-tpl="regular" onclick="switchTpl('regular')">定休日</button>
+    <button class="tpl-tab" data-tpl="summer" onclick="switchTpl('summer')">夏季休暇</button>
+    <button class="tpl-tab" data-tpl="newyear" onclick="switchTpl('newyear')">年末年始</button>
+  </div>
+  <div class="hint">日付をタップすると<span style="color:#ff3b30;font-weight:600">赤丸</span>が付きます<br>（もう一度タップで解除）</div>
+  <div class="cal-wrap" id="cal"></div>
+</div>
+
+<div class="bottom">
+  <div id="preview-area" style="display:none">
+    <div class="preview-wrap">
+      <h3>LINEコピー用テキスト<span class="preview-hint">（編集できます）</span></h3>
+      <textarea class="preview-txt" id="preview-txt"></textarea>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn-gen" onclick="gen()">文章を確認</button>
+    <button class="btn-copy" onclick="copyLine()">文章をコピー</button>
+  </div>
+  <button class="btn-share" onclick="shareCalendar()">カレンダーを画像で保存</button>
+  <div class="toast" id="toast"></div>
+  <button class="btn-reset" onclick="resetAll()">全てリセット</button>
+</div>
+
+<script>
+const DOW=['日','月','火','水','木','金','土'];
+const TEMPLATES={
+  regular:'定休日のお知らせ',
+  summer:'夏季休暇のお知らせ',
+  newyear:'年末年始のお知らせ'
+};
+const CLOSINGS={
+  regular:'定休日です。よろしくお願いいたしますm(__)m',
+  summer:'夏季休暇です。よろしくお願いいたしますm(__)m',
+  newyear:'年末年始休業です。よろしくお願いいたしますm(__)m'
+};
+let selectedTpl='regular';
+let selected=new Set();
+const now=new Date();
+let viewYear=now.getFullYear();
+let viewMonth=now.getMonth();
+const todayIso=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+
+function switchTpl(tpl){
+  selectedTpl=tpl;
+  document.querySelectorAll('.tpl-tab').forEach(b=>{
+    b.classList.toggle('active',b.dataset.tpl===tpl);
+  });
+  if(document.getElementById('preview-area').style.display==='block'){
+    document.getElementById('preview-txt').value=buildText();
+  }
+}
+
+function isoOf(y,m,d){return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;}
+
+function renderCal(){
+  const first=new Date(viewYear,viewMonth,1);
+  const last=new Date(viewYear,viewMonth+1,0);
+  const startDow=first.getDay();
+  const daysInMonth=last.getDate();
+
+  let html=`<div class="cal-header">
+    <button class="cal-nav" onclick="navMonth(-1)">‹</button>
+    <div style="display:flex;align-items:center">
+      <div class="cal-title">${viewYear}年${viewMonth+1}月</div>
+      <button class="cal-today-btn" onclick="goToday()">今月</button>
+    </div>
+    <button class="cal-nav" onclick="navMonth(1)">›</button>
+  </div>`;
+
+  html+='<div class="cal-grid">';
+  DOW.forEach((d,i)=>{
+    const cls=i===0?'sun':i===6?'sat':'';
+    html+=`<div class="cal-dow ${cls}">${d}</div>`;
+  });
+
+  for(let i=0;i<startDow;i++)html+='<div class="cal-cell empty"></div>';
+  for(let d=1;d<=daysInMonth;d++){
+    const iso=isoOf(viewYear,viewMonth,d);
+    const dow=new Date(viewYear,viewMonth,d).getDay();
+    const cls=dow===0?'sun':dow===6?'sat':'';
+    const selCls=selected.has(iso)?'selected':'';
+    const todayCls=iso===todayIso?'today':'';
+    html+=`<div class="cal-cell ${cls} ${selCls} ${todayCls}" onclick="toggleDate('${iso}')">${d}</div>`;
+  }
+  html+='</div>';
+
+  document.getElementById('cal').innerHTML=html;
+  const badge=document.getElementById('total-badge');
+  badge.textContent=selected.size+'日選択';
+  badge.style.background=selected.size>0?'#ffe4e1':'#f0f0ec';
+  badge.style.color=selected.size>0?'#d93838':'#888';
+}
+
+function toggleDate(iso){
+  if(selected.has(iso))selected.delete(iso);
+  else selected.add(iso);
+  renderCal();
+}
+
+function navMonth(d){
+  viewMonth+=d;
+  if(viewMonth<0){viewMonth=11;viewYear--;}
+  if(viewMonth>11){viewMonth=0;viewYear++;}
+  renderCal();
+}
+
+function goToday(){
+  viewYear=now.getFullYear();
+  viewMonth=now.getMonth();
+  renderCal();
+}
+
+function fmtDate(iso){
+  const [y,m,d]=iso.split('-').map(Number);
+  const dow=DOW[new Date(y,m-1,d).getDay()];
+  return `${m}月${d}日(${dow})`;
+}
+
+function groupConsecutive(sorted){
+  if(sorted.length===0)return [];
+  const groups=[];
+  let cur=[sorted[0]];
+  for(let i=1;i<sorted.length;i++){
+    const prev=new Date(sorted[i-1]);
+    const now=new Date(sorted[i]);
+    if(now-prev===86400000)cur.push(sorted[i]);
+    else{groups.push(cur);cur=[sorted[i]];}
+  }
+  groups.push(cur);
+  return groups;
+}
+
+function buildText(){
+  const title=TEMPLATES[selectedTpl];
+  const header=['お世話になっております','Hair make Racoです',title];
+  const closing=CLOSINGS[selectedTpl];
+  if(selected.size===0){
+    return [...header,'（日付を選んでください）',closing].join('\n');
+  }
+  const sorted=[...selected].sort();
+  const lines=[...header];
+  sorted.forEach(iso=>lines.push(`・${fmtDate(iso)}`));
+  lines.push(closing);
+  return lines.join('\n');
+}
+
+function gen(){
+  const pa=document.getElementById('preview-area');
+  document.getElementById('preview-txt').value=buildText();
+  pa.style.display='block';
+}
+
+function copyLine(){
+  const pa=document.getElementById('preview-area');
+  const ta=document.getElementById('preview-txt');
+  if(pa.style.display==='none'||!ta.value){ta.value=buildText();pa.style.display='block';}
+  const txt=ta.value;
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(txt).then(()=>toast('コピーしました！LINEに貼り付けてください'));
+  } else {
+    ta.select();
+    document.execCommand('copy');
+    toast('コピーしました！LINEに貼り付けてください');
+  }
+}
+
+function resetAll(){
+  selected=new Set();
+  document.getElementById('preview-area').style.display='none';
+  document.getElementById('toast').textContent='';
+  renderCal();
+}
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;setTimeout(()=>t.textContent='',3000);
+}
+
+function drawCalendarImage(){
+  const W=720,H=820;
+  const canvas=document.createElement('canvas');
+  canvas.width=W;canvas.height=H;
+  const ctx=canvas.getContext('2d');
+  const FONT='"Hiragino Sans","Yu Gothic UI","Meiryo",sans-serif';
+
+  ctx.fillStyle='#ffffff';
+  ctx.fillRect(0,0,W,H);
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+
+  ctx.fillStyle='#1a1a1a';
+  ctx.font=`bold 36px ${FONT}`;
+  ctx.fillText(`${viewYear}年${viewMonth+1}月`,W/2,55);
+
+  ctx.fillStyle='#1a56db';
+  ctx.font=`bold 20px ${FONT}`;
+  ctx.fillText(TEMPLATES[selectedTpl],W/2,95);
+
+  ctx.strokeStyle='#e0e0d8';
+  ctx.lineWidth=1;
+  ctx.beginPath();
+  ctx.moveTo(30,120);
+  ctx.lineTo(W-30,120);
+  ctx.stroke();
+
+  const padX=30;
+  const cellW=(W-padX*2)/7;
+  const cellH=100;
+  const dowY=155;
+
+  DOW.forEach((d,i)=>{
+    const x=padX+cellW*i+cellW/2;
+    ctx.fillStyle=i===0?'#d93838':i===6?'#1a56db':'#666';
+    ctx.font=`bold 20px ${FONT}`;
+    ctx.fillText(d,x,dowY);
+  });
+
+  const first=new Date(viewYear,viewMonth,1);
+  const last=new Date(viewYear,viewMonth+1,0);
+  const startDow=first.getDay();
+  const daysInMonth=last.getDate();
+  let row=0,col=startDow;
+  const gridStartY=195;
+
+  for(let d=1;d<=daysInMonth;d++){
+    const iso=isoOf(viewYear,viewMonth,d);
+    const dow=new Date(viewYear,viewMonth,d).getDay();
+    const cx=padX+cellW*col+cellW/2;
+    const cy=gridStartY+cellH*row+cellH/2;
+
+    if(selected.has(iso)){
+      ctx.fillStyle='#ff3b30';
+      ctx.beginPath();
+      ctx.arc(cx,cy,34,0,Math.PI*2);
+      ctx.fill();
+      ctx.fillStyle='#ffffff';
+      ctx.font=`bold 26px ${FONT}`;
+    } else {
+      ctx.fillStyle=dow===0?'#d93838':dow===6?'#1a56db':'#1a1a1a';
+      ctx.font=`26px ${FONT}`;
+    }
+    ctx.fillText(String(d),cx,cy);
+
+    col++;
+    if(col>6){col=0;row++;}
+  }
+
+  return canvas;
+}
+
+async function shareCalendar(){
+  const canvas=drawCalendarImage();
+  const isMobile=/iPhone|iPad|Android/i.test(navigator.userAgent);
+  canvas.toBlob(async(blob)=>{
+    const fileName=`カレンダー_${viewYear}年${viewMonth+1}月.png`;
+    const file=new File([blob],fileName,{type:'image/png'});
+
+    if(isMobile&&navigator.canShare&&navigator.canShare({files:[file]})){
+      try{
+        await navigator.share({files:[file],title:TEMPLATES[selectedTpl]});
+        return;
+      }catch(e){
+        if(e.name==='AbortError')return;
+      }
+    }
+
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download=fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+    toast('画像を保存しました！LINEにドラッグして送信してください');
+  },'image/png');
+}
+
+renderCal();
+</script>
+</body>
+</html>
