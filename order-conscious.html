@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>コンシャス発注チェックシート</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN',Meiryo,sans-serif;font-size:14px;color:#1a1a1a;background:#f5f5f0;min-height:100vh}
+.header{background:#fff;border-bottom:1px solid #e8e8e4;padding:14px 16px;position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between}
+.header h1{font-size:16px;font-weight:600;color:#1a1a1a}
+.header-sub{font-size:12px;color:#888;margin-top:2px}
+.badge{font-size:11px;background:#e8f0fe;color:#1a56db;border-radius:10px;padding:2px 8px;font-weight:600}
+.container{max-width:480px;margin:0 auto;padding:12px 14px 120px}
+.sec{background:#fff;border-radius:12px;margin-bottom:12px;overflow:hidden;border:0.5px solid #e0e0d8}
+.sec-title{font-size:12px;font-weight:600;color:#666;padding:10px 14px 8px;background:#fafaf7;border-bottom:0.5px solid #ebebea;letter-spacing:.03em;display:flex;align-items:center;gap:6px}
+.cnt-badge{font-size:11px;background:#dff0e8;color:#1a7a4a;border-radius:8px;padding:1px 7px;font-weight:600}
+.row{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:0.5px solid #f0f0ec}
+.row:last-child{border-bottom:none}
+.row label{flex:1;display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;color:#1a1a1a;-webkit-tap-highlight-color:transparent}
+.row input[type=checkbox]{width:18px;height:18px;accent-color:#1a56db;flex-shrink:0;cursor:pointer}
+.row label.on{color:#1a56db}
+.qwrap{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.qb{width:28px;height:28px;border:1px solid #ddd;background:#fff;color:#333;font-size:16px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;user-select:none}
+.qb:active{background:#f0f0f0;transform:scale(.93)}
+.qn{min-width:20px;text-align:center;font-size:13px;font-weight:600;color:#1a1a1a}
+.qu{font-size:11px;color:#999;min-width:14px}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e8e8e4;padding:12px 16px;display:flex;flex-direction:column;gap:8px;max-width:480px;margin:0 auto}
+@media(min-width:480px){.bottom{left:50%;transform:translateX(-50%);right:auto;width:480px}}
+.btn-row{display:flex;gap:8px}
+.btn-gen{flex:1;padding:11px;background:#fff;border:1px solid #ccc;border-radius:10px;font-size:13px;cursor:pointer;color:#333;font-weight:500}
+.btn-gen:active{background:#f5f5f5}
+.btn-copy{flex:1;padding:11px;background:#1a56db;border:none;border-radius:10px;font-size:13px;cursor:pointer;color:#fff;font-weight:600}
+.btn-copy:active{opacity:.85}
+.btn-reset{width:100%;padding:7px;background:none;border:none;font-size:12px;color:#999;cursor:pointer;text-decoration:underline}
+.toast{font-size:12px;color:#1a7a4a;text-align:center;min-height:15px}
+.preview-wrap{background:#f0f7f4;border:1px solid #c8e6d4;border-radius:10px;padding:12px 14px;margin-bottom:4px}
+.preview-txt{font-size:13px;white-space:pre-wrap;line-height:1.85;color:#1a1a1a;width:100%;min-height:180px;border:1px solid #c8e6d4;border-radius:8px;padding:10px;background:#fff;font-family:inherit;resize:vertical;outline:none}
+.preview-txt:focus{border-color:#1a7a4a}
+.preview-wrap h3{font-size:11px;color:#1a7a4a;font-weight:600;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
+.preview-hint{font-size:10px;color:#888;font-weight:400}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header h1" style="font-size:16px;font-weight:600">コンシャス発注シート</div>
+    <div class="header-sub">Hair make Raco</div>
+  </div>
+  <span class="badge" id="total-badge">0品選択</span>
+</div>
+
+<div class="container" id="main"></div>
+
+<div class="bottom">
+  <div id="preview-area" style="display:none">
+    <div class="preview-wrap">
+      <h3>LINEコピー用テキスト<span class="preview-hint">（編集できます）</span></h3>
+      <textarea class="preview-txt" id="preview-txt"></textarea>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn-gen" onclick="gen()">文章を確認</button>
+    <button class="btn-copy" onclick="copyLine()">LINEにコピー</button>
+  </div>
+  <div class="toast" id="toast"></div>
+  <button class="btn-reset" onclick="resetAll()">全てリセット</button>
+</div>
+
+<script>
+const CATS=[
+  {key:'nc',label:'コンシャス NCライン',lineLabel:'コンシャス（NC）',noHeader:false,items:[
+    {id:'nc6',name:'6NC',unit:'本'},
+    {id:'nc8',name:'8NC',unit:'本'},
+    {id:'nc10',name:'10NC',unit:'本'}
+  ]},
+  {key:'ac',label:'コンシャス ACライン',lineLabel:'コンシャス（AC）',noHeader:false,items:[
+    {id:'ac8',name:'8AC',unit:'本'},
+    {id:'ac10',name:'10AC',unit:'本'}
+  ]},
+  {key:'mc',label:'コンシャス MCライン',lineLabel:'コンシャス（MC）',noHeader:false,items:[
+    {id:'mc6',name:'6MC',unit:'本'},
+    {id:'mc8',name:'8MC',unit:'本'},
+    {id:'mc10',name:'10MC',unit:'本'}
+  ]},
+  {key:'ab',label:'コンシャス ABライン',lineLabel:'コンシャス（AB）',noHeader:false,items:[
+    {id:'ab8',name:'8AB',unit:'本'},
+    {id:'ab9',name:'9AB',unit:'本'}
+  ]},
+  {key:'mb',label:'コンシャス MBライン',lineLabel:'コンシャス（MB）',noHeader:false,items:[
+    {id:'mb8',name:'8MB',unit:'本'}
+  ]},
+  {key:'c',label:'コンシャス Cライン',lineLabel:'コンシャス（C）',noHeader:false,items:[
+    {id:'c8',name:'8C',unit:'本'}
+  ]},
+  {key:'other',label:'その他',lineLabel:'',noHeader:true,items:[
+    {id:'o1',name:'ウアオ テイストアップカラーメレンゲ（リフィル）',unit:'つ'},
+    {id:'o2',name:'ウアオ パーフェクト スキャルプ/スキンプロテクター（リフィル）',unit:'つ'}
+  ]}
+];
+
+let checks={},qtys={};
+
+function render(){
+  const el=document.getElementById('main');
+  let html='';
+  let total=0;
+  CATS.forEach(cat=>{
+    const cnt=cat.items.filter(i=>checks[i.id]).length;
+    total+=cnt;
+    html+=`<div class="sec"><div class="sec-title">${cat.label}${cnt>0?`<span class="cnt-badge">${cnt}</span>`:''}</div>`;
+    cat.items.forEach(item=>{
+      const chk=checks[item.id]?'checked':'';
+      const q=qtys[item.id]||1;
+      html+=`<div class="row">
+        <label class="${checks[item.id]?'on':''}">
+          <input type="checkbox" ${chk} onchange="toggle('${item.id}',this.checked)">
+          ${item.name}
+        </label>
+        <div class="qwrap">
+          <button class="qb" onclick="chg('${item.id}',-1)">－</button>
+          <span class="qn" id="q_${item.id}">${q}</span>
+          <button class="qb" onclick="chg('${item.id}',1)">＋</button>
+          <span class="qu">${item.unit}</span>
+        </div>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  el.innerHTML=html;
+  document.getElementById('total-badge').textContent=total+'品選択';
+  document.getElementById('total-badge').style.background=total>0?'#dff0e8':'#f0f0ec';
+  document.getElementById('total-badge').style.color=total>0?'#1a7a4a':'#888';
+}
+render();
+
+function toggle(id,v){checks[id]=v;render()}
+function chg(id,d){
+  qtys[id]=Math.max(1,(qtys[id]||1)+d);
+  checks[id]=true;
+  render();
+}
+
+function buildText(){
+  const lines=['おはようございます'];
+  CATS.forEach(cat=>{
+    const sel=cat.items.filter(i=>checks[i.id]);
+    if(!sel.length)return;
+    if(!cat.noHeader)lines.push(cat.lineLabel);
+    sel.forEach(i=>lines.push(cat.noHeader?`${i.name}　${qtys[i.id]||1}${i.unit}`:`・${i.name}　${qtys[i.id]||1}${i.unit}`));
+  });
+  lines.push('注文お願い致します');
+  return lines.join('\n');
+}
+
+function gen(){
+  const pa=document.getElementById('preview-area');
+  document.getElementById('preview-txt').value=buildText();
+  pa.style.display='block';
+}
+function copyLine(){
+  const pa=document.getElementById('preview-area');
+  const ta=document.getElementById('preview-txt');
+  if(pa.style.display==='none'||!ta.value){ta.value=buildText();pa.style.display='block';}
+  const txt=ta.value;
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(txt).then(()=>toast('コピーしました！LINEに貼り付けてください'));
+  } else {
+    ta.select();
+    document.execCommand('copy');
+    toast('コピーしました！LINEに貼り付けてください');
+  }
+}
+function resetAll(){
+  checks={};qtys={};
+  document.getElementById('preview-area').style.display='none';
+  document.getElementById('toast').textContent='';
+  render();
+}
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;setTimeout(()=>t.textContent='',3000);
+}
+</script>
+</body>
+</html>
