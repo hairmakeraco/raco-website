@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LINE返信テンプレ集</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN',Meiryo,sans-serif;font-size:14px;color:#1a1a1a;background:#f5f5f0;min-height:100vh}
+.header{background:#fff;border-bottom:1px solid #e8e8e4;padding:14px 16px;position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between}
+.header h1{font-size:16px;font-weight:600;color:#1a1a1a}
+.header-sub{font-size:12px;color:#888;margin-top:2px}
+.badge{font-size:11px;background:#e8f0fe;color:#1a56db;border-radius:10px;padding:2px 8px;font-weight:600}
+.container{max-width:480px;margin:0 auto;padding:12px 14px 40px}
+.settings{background:#fff;border-radius:12px;margin-bottom:12px;border:0.5px solid #e0e0d8;padding:12px 14px}
+.settings label{font-size:11px;color:#666;font-weight:600;display:block;margin-bottom:4px}
+.settings input{width:100%;padding:9px 10px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;outline:none}
+.settings input:focus{border-color:#1a56db}
+.settings .hint{font-size:10px;color:#999;margin-top:6px}
+.sec{background:#fff;border-radius:12px;margin-bottom:12px;overflow:hidden;border:0.5px solid #e0e0d8}
+.sec-title{font-size:12px;font-weight:600;color:#666;padding:10px 14px 8px;background:#fafaf7;border-bottom:0.5px solid #ebebea;letter-spacing:.03em;display:flex;align-items:center;gap:6px}
+.tpl{border-bottom:0.5px solid #f0f0ec}
+.tpl:last-child{border-bottom:none}
+.tpl-head{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+.tpl-head:active{background:#fafaf7}
+.tpl-title{flex:1;font-size:13px;color:#1a1a1a;font-weight:500}
+.tpl-arrow{font-size:11px;color:#bbb;transition:transform .15s}
+.tpl.open .tpl-arrow{transform:rotate(90deg)}
+.tpl-body{display:none;padding:0 14px 12px}
+.tpl.open .tpl-body{display:block}
+.tpl-txt{font-size:13px;white-space:pre-wrap;line-height:1.85;color:#1a1a1a;width:100%;min-height:120px;border:1px solid #c8e6d4;border-radius:8px;padding:10px;background:#f7fbf9;font-family:inherit;resize:vertical;outline:none}
+.tpl-txt:focus{border-color:#1a7a4a;background:#fff}
+.tpl-note{font-size:10px;color:#c47b1a;margin:6px 0 0;line-height:1.5}
+.tpl-actions{display:flex;gap:8px;margin-top:8px}
+.btn-copy{flex:1;padding:10px;background:#1a56db;border:none;border-radius:10px;font-size:13px;cursor:pointer;color:#fff;font-weight:600;-webkit-tap-highlight-color:transparent}
+.btn-copy:active{opacity:.85}
+.btn-undo{padding:10px 14px;background:#fff;border:1px solid #ccc;border-radius:10px;font-size:12px;cursor:pointer;color:#666}
+.btn-undo:active{background:#f5f5f5}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a7a4a;color:#fff;font-size:13px;font-weight:600;padding:10px 20px;border-radius:20px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20;white-space:nowrap}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>LINE返信テンプレ</h1>
+    <div class="header-sub">美容室オーナー用</div>
+  </div>
+  <span class="badge" id="cnt-badge"></span>
+</div>
+
+<div class="container">
+
+  <div class="settings">
+    <label>お店の名前（テンプレに自動で入ります）</label>
+    <input type="text" id="shop-name" placeholder="例：Hair make Raco" oninput="saveShop()">
+    <div class="hint">〇〇の部分（日時・お名前など）は、開いてから直接編集できます</div>
+  </div>
+
+  <div id="main"></div>
+
+</div>
+
+<div class="toast" id="toast">コピーしました！</div>
+
+<script>
+const SHOP='{店名}';
+const CATS=[
+  {label:'予約の受付・確認',items:[
+    {title:'予約確定のお返事',text:'ご予約ありがとうございます😊\n\n〇月〇日（〇）〇時〜\n〇〇のメニューで承りました。\n\nご来店を心よりお待ちしております✨\n'+SHOP},
+    {title:'予約確定のお返事（シンプル版）',text:'ご予約ありがとうございます😊\n\n〇月〇日（〇）〇時〜で承りました。\n\nお待ちしております✨'},
+    {title:'「いつ空いてますか？」への返事',text:'お問い合わせありがとうございます😊\n\n直近ですと、\n・〇月〇日（〇）〇時〜\n・〇月〇日（〇）〇時〜\n・〇月〇日（〇）〇時〜\nが空いております！\n\nご都合の良い日時はございますでしょうか？\nご予約お待ちしております✨'},
+    {title:'「いつ空いてますか？」への返事（シンプル版）',text:'おはようございます😊\n\n・〇月〇日（〇）〇時〜\n・〇月〇日（〇）〇時〜\n・〇月〇日（〇）〇時〜\n\n今のところ空いてます。'},
+    {title:'日時が決まった時の短い返事',text:'ありがとうございます\nお待ちしております😊'},
+    {title:'希望日時が埋まっている時',text:'お問い合わせありがとうございます。\n\n申し訳ございません、〇月〇日（〇）〇時は あいにくご予約が埋まっております🙇\n\n同日ですと 〇時〜、もしくは 〇日（〇）〇時〜 でしたらご案内可能です。\nご都合いかがでしょうか？'},
+    {title:'予約変更OKのお返事',text:'ご連絡ありがとうございます😊\n\nかしこまりました！\n〇月〇日（〇）〇時〜 に変更いたしますね。\n\n当日お待ちしております✨'},
+    {title:'キャンセルを受けた時',text:'ご連絡ありがとうございます。\n\nかしこまりました、〇月〇日のご予約はキャンセルで承りますね。\n\nまたのご都合の良い時に、ぜひお待ちしております😊\nわざわざご連絡いただきありがとうございました！'},
+    {title:'当日予約OKのお返事',text:'お問い合わせありがとうございます😊\n\n本日〇時〜でしたら空きがございます！\nそのままご予約お取りしてもよろしいでしょうか？\n\nご来店お待ちしております✨'},
+    {title:'新規のお客様からの問い合わせ',text:'はじめまして、お問い合わせありがとうございます😊\n' + SHOP + 'です。\n\nご希望の日時とメニューをお伺いできますでしょうか？\n初めてのご来店でしたら、髪のお悩みなども当日ゆっくりお伺いしますので、お気軽にお越しください✨'}
+  ]},
+  {label:'前日・当日のやりとり',items:[
+    {title:'前日リマインド',text:'こんにちは、' + SHOP + 'です😊\n\n明日 〇時〜 ご予約を承っております。\nお気をつけてお越しくださいませ✨\n\nご都合が悪くなった場合は、お気軽にご連絡ください。'},
+    {title:'「遅れます」への返事',text:'ご連絡ありがとうございます😊\n\n承知いたしました、焦らずお気をつけてお越しくださいね。\nお待ちしております！'},
+    {title:'大幅な遅れで調整が必要な時',text:'ご連絡ありがとうございます。\n\nお時間の関係で、本日は〇〇のメニューのみのご案内になるかもしれません🙇\n詳しくはご来店時にご相談させてください。\n\nお気をつけてお越しくださいませ。'},
+    {title:'場所・駐車場のご案内',text:'お問い合わせありがとうございます😊\n\n当店の場所はこちらです。\n〇〇（住所や地図URL）\n\n駐車場は〇〇にございます。\nわかりにくい場合はお電話くださいね、ご案内いたします！'},
+    {title:'体調不良キャンセルへの気遣い',text:'ご連絡ありがとうございます。\n\nどうぞお気になさらないでください😊\nまずはゆっくり休んで、お大事になさってくださいね。\n\nまた体調が良くなられたら、いつでもご連絡お待ちしております✨'}
+  ]},
+  {label:'メニュー・料金のご質問',items:[
+    {title:'料金のご質問への返事',text:'お問い合わせありがとうございます😊\n\n〇〇のメニューは ¥〇,〇〇〇 です。\n髪の長さや状態により多少前後する場合がございますので、当日カウンセリングでもご説明いたしますね✨'},
+    {title:'所要時間のご質問への返事',text:'お問い合わせありがとうございます😊\n\n〇〇のメニューですと、おおよそ〇時間ほどお時間をいただいております。\n髪の長さや状態によって多少前後いたしますので、お時間に余裕を持ってお越しいただけると安心です✨'},
+    {title:'「どのメニューがいいか相談したい」への返事',text:'ご相談ありがとうございます😊\n\n髪の状態を見せていただいてからの方が確実なご提案ができますので、当日カウンセリングでじっくりご相談させてください✨\n\nもしよろしければ、現在の髪の写真を送っていただけると、事前にある程度ご提案できますよ！'},
+    {title:'お子様連れOKのご案内',text:'お問い合わせありがとうございます😊\n\nお子様連れでのご来店、大歓迎です！\n比較的ゆったりご案内できるお時間もございますので、ご希望でしたら調整いたしますね✨\n\nお気軽にお越しください。'}
+  ]},
+  {label:'ご来店後のフォロー',items:[
+    {title:'ご来店のお礼',text:'本日はご来店いただきありがとうございました😊\n\n仕上がりはいかがでしょうか？\n気になることがあれば、いつでもお気軽にご連絡くださいね。\n\nまたのご来店を心よりお待ちしております✨\n' + SHOP},
+    {title:'お直し希望への返事',text:'ご連絡ありがとうございます。\nせっかくご来店いただいたのに申し訳ございません🙇\n\nぜひお直しさせてください。\nご都合の良い日時をいくつか教えていただけますでしょうか？\n\n責任を持って対応させていただきます。'},
+    {title:'口コミ・レビューへのお礼',text:'素敵な口コミをありがとうございます😊\nとても励みになります✨\n\nこれからもご満足いただけるよう精一杯がんばりますので、今後ともよろしくお願いいたします！'},
+    {title:'商品の取り置き・購入希望への返事',text:'お問い合わせありがとうございます😊\n\n〇〇、お取り置きしておきますね！\nご来店の際にお渡しいたします。\n\n在庫を確認して、もし切らしていた場合はあらためてご連絡いたします✨'}
+  ]},
+  {label:'休業・営業のお知らせ',items:[
+    {title:'定休日・営業時間のご案内',text:'お問い合わせありがとうございます😊\n\n営業時間は 〇時〜〇時、\n定休日は 毎週〇曜日 です。\n\nご予約お待ちしております✨'},
+    {title:'臨時休業のお知らせ',text:'いつもありがとうございます、' + SHOP + 'です。\n\n誠に勝手ながら、〇月〇日(〇) は臨時休業とさせていただきます🙇\n\nご迷惑をおかけしますが、何卒よろしくお願いいたします。'},
+    {title:'年末年始・お盆の営業案内',text:'いつもありがとうございます、' + SHOP + 'です😊\n\n【年末年始の営業について】\n〇月〇日(〇)〜〇月〇日(〇) はお休みをいただきます。\n〇月〇日(〇)から通常営業いたします。\n\n本年も大変お世話になりました。\n来年もどうぞよろしくお願いいたします✨'}
+  ]}
+];
+
+function shopName(){
+  return document.getElementById('shop-name').value.trim()||'当店';
+}
+function saveShop(){
+  try{localStorage.setItem('line_tpl_shop',document.getElementById('shop-name').value)}catch(e){}
+  document.querySelectorAll('.tpl.open').forEach(el=>{
+    const ta=el.querySelector('.tpl-txt');
+    if(ta&&!ta.dataset.edited)ta.value=fill(ta.dataset.orig);
+  });
+}
+function fill(t){
+  return t.split('{店名}').join(shopName());
+}
+
+function render(){
+  const el=document.getElementById('main');
+  let html='';let total=0;
+  CATS.forEach((cat,ci)=>{
+    total+=cat.items.length;
+    html+=`<div class="sec"><div class="sec-title">${cat.label}</div>`;
+    cat.items.forEach((item,ii)=>{
+      const id=`t_${ci}_${ii}`;
+      const hasBlank=item.text.indexOf('〇')>=0;
+      html+=`<div class="tpl" id="${id}">
+        <div class="tpl-head" onclick="toggle('${id}')">
+          <span class="tpl-title">${item.title}</span>
+          <span class="tpl-arrow">▶</span>
+        </div>
+        <div class="tpl-body">
+          <textarea class="tpl-txt" data-orig="" oninput="this.dataset.edited='1'"></textarea>
+          ${hasBlank?'<div class="tpl-note">※ 〇の部分（日時・メニュー・金額など）を書き換えてからコピーしてください</div>':''}
+          <div class="tpl-actions">
+            <button class="btn-copy" onclick="copyTpl('${id}')">LINEにコピー</button>
+            <button class="btn-undo" onclick="undoTpl('${id}')">元に戻す</button>
+          </div>
+        </div>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  el.innerHTML=html;
+  CATS.forEach((cat,ci)=>{
+    cat.items.forEach((item,ii)=>{
+      const ta=document.querySelector(`#t_${ci}_${ii} .tpl-txt`);
+      ta.dataset.orig=item.text;
+    });
+  });
+  document.getElementById('cnt-badge').textContent=total+'種類';
+}
+
+function toggle(id){
+  const el=document.getElementById(id);
+  const opening=!el.classList.contains('open');
+  document.querySelectorAll('.tpl.open').forEach(o=>{if(o!==el)o.classList.remove('open')});
+  el.classList.toggle('open');
+  if(opening){
+    const ta=el.querySelector('.tpl-txt');
+    if(!ta.dataset.edited)ta.value=fill(ta.dataset.orig);
+    ta.style.height='auto';
+    ta.style.height=Math.max(120,ta.scrollHeight+4)+'px';
+  }
+}
+function copyTpl(id){
+  const ta=document.querySelector(`#${id} .tpl-txt`);
+  const txt=ta.value;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(()=>toast()).catch(()=>{fallbackCopy(ta)});
+  }else{fallbackCopy(ta)}
+}
+function fallbackCopy(ta){
+  ta.select();
+  try{document.execCommand('copy');toast()}catch(e){}
+}
+function undoTpl(id){
+  const ta=document.querySelector(`#${id} .tpl-txt`);
+  ta.value=fill(ta.dataset.orig);
+  delete ta.dataset.edited;
+}
+function toast(){
+  const t=document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+try{
+  const s=localStorage.getItem('line_tpl_shop');
+  if(s)document.getElementById('shop-name').value=s;
+}catch(e){}
+render();
+</script>
+</body>
+</html>
