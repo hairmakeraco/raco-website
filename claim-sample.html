@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>【無料おためし】クレーム対応テンプレ3選｜テンプレート倶楽部</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN',Meiryo,sans-serif;font-size:14px;color:#2b2826;background:#faf7f3;min-height:100vh}
+.header{background:#8a6248;color:#fff;padding:14px 16px;position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between}
+.header h1{font-size:16px;font-weight:700}
+.header-sub{font-size:11px;opacity:.9;margin-top:2px}
+.badge{font-size:11px;background:#fff;color:#8a6248;border-radius:10px;padding:2px 9px;font-weight:700}
+.container{max-width:520px;margin:0 auto;padding:12px 14px 48px}
+.notice{background:#fff;border-radius:12px;margin-bottom:12px;border:1px solid #e3d9cd;padding:13px 15px}
+.notice h2{font-size:13px;color:#8a6248;font-weight:700;margin-bottom:6px}
+.notice p{font-size:11.5px;color:#6b635c;line-height:1.65;margin-bottom:5px}
+.notice .warn{color:#9a7320;background:#fdf8ee;border:1px solid #e6cfa9;border-radius:8px;padding:8px 10px;margin-top:8px;font-size:11px;line-height:1.6}
+.sec{background:#fff;border-radius:12px;margin-bottom:12px;overflow:hidden;border:1px solid #e3d9cd}
+.sec-title{font-size:12px;font-weight:700;color:#8a6248;padding:11px 14px 9px;background:#f7f1ea;border-bottom:1px solid #ece2d6;letter-spacing:.03em}
+.tpl{border-bottom:1px solid #f1ebe2}
+.tpl:last-child{border-bottom:none}
+.tpl-head{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+.tpl-head:active{background:#faf7f3}
+.tpl-no{flex:none;font-size:11px;font-weight:700;color:#fff;background:#a87c5f;border-radius:6px;padding:2px 8px}
+.tpl-title{flex:1;font-size:13.5px;color:#2b2826;font-weight:600}
+.tag{flex:none;font-size:10px;font-weight:700;border-radius:5px;padding:2px 7px}
+.tag.free{background:#eef7f1;color:#3f7d57;border:1px solid #cfe6d8}
+.tag.smp{background:#fbf0ef;color:#b5524d;border:1px solid #eccfcd}
+.tpl-arrow{font-size:11px;color:#c3b6a6;transition:transform .15s}
+.tpl.open .tpl-arrow{transform:rotate(90deg)}
+.tpl-body{display:none;padding:0 14px 13px}
+.tpl.open .tpl-body{display:block}
+.tpl-when{font-size:11px;color:#9a8d7f;margin:2px 0 7px}
+.tpl-txt{font-size:13.5px;white-space:pre-wrap;line-height:1.85;color:#2b2826;width:100%;min-height:120px;border:1px solid #cfe6d8;border-radius:8px;padding:11px;background:#f5faf6;font-family:inherit;resize:vertical;outline:none}
+.tpl-txt:focus{border-color:#3f7d57;background:#fff}
+.tpl-txt[readonly]{background:#f3efe9;border-color:#e0d6c8;color:#5a534c}
+.tpl-note{font-size:10.5px;color:#8a6248;margin:7px 0 0;line-height:1.55}
+.tpl-actions{display:flex;gap:8px;margin-top:8px}
+.btn-line,.btn-mail{flex:1;padding:11px;border:none;border-radius:10px;font-size:13px;cursor:pointer;color:#fff;font-weight:700;-webkit-tap-highlight-color:transparent}
+.btn-line{background:#06c755}
+.btn-mail{background:#5b7fa6}
+.btn-line:active,.btn-mail:active{opacity:.85}
+.btn-undo{flex:1;padding:11px;background:#fff;border:1px solid #d8ccbd;border-radius:10px;font-size:12px;cursor:pointer;color:#6b635c}
+.btn-undo:active{background:#f7f1ea}
+.lock{margin-top:9px;background:#fbf6ef;border:1px dashed #d8b98c;border-radius:10px;padding:11px 12px;text-align:center}
+.lock p{font-size:11.5px;color:#8a6248;margin-bottom:8px;line-height:1.6}
+.lock a{display:block;background:#a87c5f;color:#fff;font-weight:700;font-size:13px;text-decoration:none;border-radius:10px;padding:11px}
+.lock a:active{opacity:.85}
+.cta{background:#fff;border:2px solid #a87c5f;border-radius:14px;padding:20px 18px;text-align:center;margin-top:4px}
+.cta h3{font-size:17px;font-weight:800;margin-bottom:6px}
+.cta h3 b{color:#a87c5f}
+.cta p{font-size:12px;color:#6b635c;line-height:1.7;margin-bottom:13px}
+.cta a{display:block;background:#a87c5f;color:#fff;font-weight:800;font-size:15px;text-decoration:none;border-radius:24px;padding:14px}
+.cta a:active{opacity:.85}
+.cta .price{font-size:11.5px;color:#9a8d7f;margin-top:9px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#3f7d57;color:#fff;font-size:13px;font-weight:700;padding:11px 22px;border-radius:22px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20;white-space:nowrap}
+.toast.show{opacity:1}
+.foot{text-align:center;font-size:10.5px;color:#9a8d7f;margin-top:18px;line-height:1.7}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>クレーム対応テンプレ【無料おためし】</h1>
+    <div class="header-sub">テンプレート倶楽部</div>
+  </div>
+  <span class="badge">3種</span>
+</div>
+
+<div class="container">
+
+  <div class="notice">
+    <h2>使い方</h2>
+    <p>① 場面をタップ → ② 文中の「〇」（お名前・日時・メニュー等）を書き換える → ③「LINEにコピー」を押して貼り付け。</p>
+    <p>これは『クレーム対応テンプレ<b>50選</b>』の無料おためし版です。<b>1つ目はそのまま使えます。</b>残り2つは中身のご確認用です。</p>
+    <div class="warn">※本テンプレは文例集です。法律・医療上の助言ではありません。返金・健康被害・損害賠償など重大な事案は専門家（弁護士・保険会社・医療機関等）にご相談ください。対応は各サロンの判断と責任で行ってください。再配布・転売・全文公開は禁止です。</div>
+  </div>
+
+  <div id="main"></div>
+
+  <div class="cta">
+    <h3>残り <b>47種</b> はフル版で</h3>
+    <p>カラー・パーマ・カット・返金・遅刻・口コミ・やけど対応まで、全9カテゴリ50種。<br>PDF＋このツール版の2点セットです。</p>
+    <a href="https://templateclub.base.shop">フル版を見てみる（980円）→</a>
+    <div class="price">美容室クレーム対応テンプレ50選 ／ テンプレート倶楽部</div>
+  </div>
+
+  <div class="foot">【無料おためし】クレーム対応テンプレ3選 ／ テンプレート倶楽部</div>
+
+</div>
+
+<div class="toast" id="toast">コピーしました！</div>
+
+<script>
+const SHOP='https://templateclub.base.shop';
+const ITEMS=[
+ {no:'01',cat:'カラー',title:'思ったより暗い',free:true,when:'「染めた色、思ったより暗い気がします」',
+  text:'〇〇様、ご連絡ありがとうございます。\n\n仕上がりがイメージより暗く感じられたとのこと、ご期待に添えず申し訳ございません。\n\n数日でやや明るく馴染むこともございますが、一度実際の状態を拝見してご相談させてください。\n〇日〜〇日でご来店いただけますでしょうか。お直しさせていただきます。',
+  note:'まず謝罪→確認の来店提案。「そういうもの」と説明から入らない。'},
+ {no:'15',cat:'カット',title:'前髪が短い',free:false,when:'「前髪を切られすぎた」',
+  text:'〇〇様、ご連絡ありがとうございます。\n\n前髪が思ったより短くなってしまい、ご不安な思いをさせて申し訳ございません。\n\n今すぐの長さ調整は難しいのですが、流し方やピンでの見せ方でカバーできます。伸びてくるまでの整えも無料で承りますので、いつでもご来店ください。',
+  note:'正直に「今は戻せない」と認めつつ、伸びるまでのフォローを約束。'},
+ {no:'33',cat:'予約',title:'無断キャンセル',free:false,when:'連絡なく来店されなかった後のフォロー',
+  text:'〇〇様、いつもありがとうございます。\n\n本日〇時にご予約をいただいておりましたが、ご体調など大丈夫でしょうか。\n\n何かご事情がおありかと存じます。改めてのご予約も承りますので、ご都合のよいときにご連絡くださいね。',
+  note:'まず体調を気づかう文面に。責める一文は入れない。'}
+];
+
+function render(){
+  const el=document.getElementById('main');
+  let html='<div class="sec"><div class="sec-title">おためし 3パターン（カラー／カット／予約）</div>';
+  ITEMS.forEach((item,i)=>{
+    const id='t_'+i;
+    const tag=item.free
+      ? '<span class="tag free">使える</span>'
+      : '<span class="tag smp">サンプル</span>';
+    const actions=item.free
+      ? `<div class="tpl-actions">
+           <button class="btn-line" onclick="copyTpl('${id}')">LINEにコピー</button>
+           <button class="btn-mail" onclick="mailTpl('${id}')">メールで送る</button>
+         </div>
+         <div class="tpl-actions">
+           <button class="btn-undo" onclick="undoTpl('${id}')">元に戻す</button>
+         </div>`
+      : `<div class="lock">
+           <p>🔒 こちらは中身のご確認用サンプルです。<br>そのままコピーして使えるのは「フル版」です。</p>
+           <a href="${SHOP}">フル版（980円）を見る →</a>
+         </div>`;
+    const ro=item.free?'':' readonly';
+    html+=`<div class="tpl" id="${id}">
+      <div class="tpl-head" onclick="toggle('${id}')">
+        <span class="tpl-no">${item.no}</span>
+        <span class="tpl-title">${item.title}（${item.cat}）</span>
+        ${tag}
+        <span class="tpl-arrow">▶</span>
+      </div>
+      <div class="tpl-body">
+        <div class="tpl-when">こんな時：${item.when}</div>
+        <textarea class="tpl-txt"${ro} data-orig="" oninput="this.dataset.edited='1'"></textarea>
+        <div class="tpl-note">ポイント：${item.note}</div>
+        ${actions}
+      </div>
+    </div>`;
+  });
+  html+='</div>';
+  el.innerHTML=html;
+  ITEMS.forEach((item,i)=>{
+    document.querySelector('#t_'+i+' .tpl-txt').dataset.orig=item.text;
+  });
+  toggle('t_0');
+}
+function toggle(id){
+  const el=document.getElementById(id);
+  const opening=!el.classList.contains('open');
+  document.querySelectorAll('.tpl.open').forEach(o=>{if(o!==el)o.classList.remove('open')});
+  el.classList.toggle('open');
+  if(opening){
+    const ta=el.querySelector('.tpl-txt');
+    if(!ta.dataset.edited)ta.value=ta.dataset.orig;
+    ta.style.height='auto';
+    ta.style.height=Math.max(120,ta.scrollHeight+4)+'px';
+  }
+}
+function copyTpl(id){
+  const ta=document.querySelector('#'+id+' .tpl-txt');
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(ta.value).then(()=>toast()).catch(()=>fallbackCopy(ta));
+  }else{fallbackCopy(ta)}
+}
+function fallbackCopy(ta){ta.removeAttribute('readonly');ta.select();try{document.execCommand('copy');toast()}catch(e){}}
+function mailTpl(id){
+  const ta=document.querySelector('#'+id+' .tpl-txt');
+  const txt=ta.value;
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).catch(()=>{})}
+  location.href='mailto:?body='+encodeURIComponent(txt);
+}
+function undoTpl(id){
+  const ta=document.querySelector('#'+id+' .tpl-txt');
+  ta.value=ta.dataset.orig;delete ta.dataset.edited;
+}
+function toast(){
+  const t=document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+render();
+</script>
+</body>
+</html>
