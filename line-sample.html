@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>【無料おためし】美容室LINE返信テンプレ3選｜テンプレート倶楽部</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN',Meiryo,sans-serif;font-size:14px;color:#2b2826;background:#faf7f3;min-height:100vh}
+.header{background:#8a6248;color:#fff;padding:14px 16px;position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between}
+.header h1{font-size:16px;font-weight:700}
+.header-sub{font-size:11px;opacity:.9;margin-top:2px}
+.badge{font-size:11px;background:#fff;color:#8a6248;border-radius:10px;padding:2px 9px;font-weight:700}
+.container{max-width:520px;margin:0 auto;padding:12px 14px 48px}
+.settings{background:#fff;border-radius:12px;margin-bottom:12px;border:1px solid #e3d9cd;padding:13px 15px}
+.settings label{font-size:11px;color:#8a6248;font-weight:700;display:block;margin-bottom:5px}
+.settings input{width:100%;padding:9px 10px;border:1px solid #ddd2c4;border-radius:8px;font-size:14px;font-family:inherit;outline:none}
+.settings input:focus{border-color:#a87c5f}
+.settings .hint{font-size:10.5px;color:#9a8d7f;margin-top:7px;line-height:1.6}
+.notice{background:#fff;border-radius:12px;margin-bottom:12px;border:1px solid #e3d9cd;padding:13px 15px}
+.notice h2{font-size:13px;color:#8a6248;font-weight:700;margin-bottom:6px}
+.notice p{font-size:11.5px;color:#6b635c;line-height:1.65;margin-bottom:5px}
+.notice .warn{color:#9a7320;background:#fdf8ee;border:1px solid #e6cfa9;border-radius:8px;padding:8px 10px;margin-top:8px;font-size:11px;line-height:1.6}
+.sec{background:#fff;border-radius:12px;margin-bottom:12px;overflow:hidden;border:1px solid #e3d9cd}
+.sec-title{font-size:12px;font-weight:700;color:#8a6248;padding:11px 14px 9px;background:#f7f1ea;border-bottom:1px solid #ece2d6;letter-spacing:.03em}
+.tpl{border-bottom:1px solid #f1ebe2}
+.tpl:last-child{border-bottom:none}
+.tpl-head{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+.tpl-head:active{background:#faf7f3}
+.tpl-no{flex:none;font-size:11px;font-weight:700;color:#fff;background:#a87c5f;border-radius:6px;padding:2px 8px}
+.tpl-title{flex:1;font-size:13.5px;color:#2b2826;font-weight:600}
+.tag{flex:none;font-size:10px;font-weight:700;border-radius:5px;padding:2px 7px}
+.tag.free{background:#eef7f1;color:#3f7d57;border:1px solid #cfe6d8}
+.tag.smp{background:#fbf0ef;color:#b5524d;border:1px solid #eccfcd}
+.tpl-arrow{font-size:11px;color:#c3b6a6;transition:transform .15s}
+.tpl.open .tpl-arrow{transform:rotate(90deg)}
+.tpl-body{display:none;padding:0 14px 13px}
+.tpl.open .tpl-body{display:block}
+.ver-tabs{display:flex;gap:8px;margin:2px 0 9px}
+.ver-btn{flex:1;padding:8px;border:1px solid #d8ccbd;border-radius:9px;font-size:12.5px;font-weight:700;background:#fff;color:#8a6248;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ver-btn.on{background:#8a6248;color:#fff;border-color:#8a6248}
+.ver-btn:active{opacity:.85}
+.tpl-txt{font-size:13.5px;white-space:pre-wrap;line-height:1.9;color:#2b2826;width:100%;min-height:120px;border:1px solid #cfe6d8;border-radius:8px;padding:11px;background:#f5faf6;font-family:inherit;resize:vertical;outline:none}
+.tpl-txt:focus{border-color:#3f7d57;background:#fff}
+.tpl-txt[readonly]{background:#f3efe9;border-color:#e0d6c8;color:#5a534c}
+.tpl-note{font-size:10.5px;color:#8a6248;margin:7px 0 0;line-height:1.55}
+.tpl-actions{display:flex;gap:8px;margin-top:8px}
+.btn-copy,.btn-mail{flex:1;padding:11px;border:none;border-radius:10px;font-size:13px;cursor:pointer;color:#fff;font-weight:700;-webkit-tap-highlight-color:transparent}
+.btn-copy{background:#06c755}
+.btn-mail{background:#5b7fa6}
+.btn-copy:active,.btn-mail:active{opacity:.85}
+.btn-undo{flex:1;padding:11px;background:#fff;border:1px solid #d8ccbd;border-radius:10px;font-size:12px;cursor:pointer;color:#6b635c}
+.btn-undo:active{background:#f7f1ea}
+.lock{margin-top:9px;background:#fbf6ef;border:1px dashed #d8b98c;border-radius:10px;padding:11px 12px;text-align:center}
+.lock p{font-size:11.5px;color:#8a6248;margin-bottom:8px;line-height:1.6}
+.lock a{display:block;background:#a87c5f;color:#fff;font-weight:700;font-size:13px;text-decoration:none;border-radius:10px;padding:11px}
+.lock a:active{opacity:.85}
+.cta{background:#fff;border:2px solid #a87c5f;border-radius:14px;padding:20px 18px;text-align:center;margin-top:4px}
+.cta h3{font-size:17px;font-weight:800;margin-bottom:6px}
+.cta h3 b{color:#a87c5f}
+.cta p{font-size:12px;color:#6b635c;line-height:1.7;margin-bottom:13px}
+.cta a{display:block;background:#a87c5f;color:#fff;font-weight:800;font-size:15px;text-decoration:none;border-radius:24px;padding:14px}
+.cta a:active{opacity:.85}
+.cta .price{font-size:11.5px;color:#9a8d7f;margin-top:9px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#3f7d57;color:#fff;font-size:13px;font-weight:700;padding:11px 22px;border-radius:22px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20;white-space:nowrap}
+.toast.show{opacity:1}
+.foot{text-align:center;font-size:10.5px;color:#9a8d7f;margin-top:18px;line-height:1.7}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>LINE返信テンプレ【無料おためし】</h1>
+    <div class="header-sub">テンプレート倶楽部</div>
+  </div>
+  <span class="badge">3種</span>
+</div>
+
+<div class="container">
+
+  <div class="settings">
+    <label>お店の名前（テンプレに自動で入ります）</label>
+    <input type="text" id="shop-name" placeholder="お店の名前を入力" oninput="saveShop()">
+    <div class="hint">これは『LINE返信テンプレ50選』の無料おためし版です。1つ目はそのまま使えて、「普通／フレンドリー」の2つの言い方も試せます。〇（日時・料金など）は開いてから書き換えできます。</div>
+  </div>
+
+  <div id="main"></div>
+
+  <div class="cta">
+    <h3>残り <b>47シーン</b> はフル版で</h3>
+    <p>予約・料金・来店後フォロー・お知らせまで、毎日のLINEがそのまま使える全50シーン。<br>各シーンに「普通」＆「フレンドリー」2バージョン＝実質100通り。<br>PDF＋このツール版の2点セットです。</p>
+    <a href="https://templateclub.base.shop">フル版を見てみる（1,280円）→</a>
+    <div class="price">美容室LINE返信テンプレ50選 ／ テンプレート倶楽部</div>
+  </div>
+
+  <div class="foot">【無料おためし】美容室LINE返信テンプレ3選 ／ テンプレート倶楽部</div>
+
+</div>
+
+<div class="toast" id="toast">コピーしました！</div>
+
+<script>
+const SHOP='{店名}';
+const ITEMS=[
+ {no:'31',cat:'来店後フォロー',title:'ご来店のお礼',free:true,
+  n:'本日はご来店いただきありがとうございました。\n仕上がりはいかがでしょうか。気になる点がございましたら、お気軽にご連絡ください。\nまたのご来店をお待ちしております。\n'+SHOP,
+  f:'本日はご来店ありがとうございました😊\n仕上がりはいかがですか？✨\n気になることあれば、いつでも気軽にご連絡くださいね！\nまたお待ちしております😊\n'+SHOP},
+ {no:'02',cat:'予約の受付',title:'「いつ空いてますか？」への返事',free:false,
+  n:'お問い合わせありがとうございます。\n\n直近では下記のお時間がご案内可能です。\n・〇月〇日（〇）〇時〜\n・〇月〇日（〇）〇時〜\n・〇月〇日（〇）〇時〜\n\nご都合のよい日時をお知らせください。',
+  f:''},
+ {no:'07',cat:'予約の受付',title:'キャンセルを受けた時',free:false,
+  n:'ご連絡ありがとうございます。\nかしこまりました、〇月〇日のご予約はキャンセルで承ります。\nまたご都合のよい時にお待ちしております。',
+  f:''}
+];
+const SHOPLINK='https://templateclub.base.shop';
+
+function shopName(){return document.getElementById('shop-name').value.trim()||'当店';}
+function saveShop(){
+  try{localStorage.setItem('line_smp_shop',document.getElementById('shop-name').value)}catch(e){}
+  document.querySelectorAll('.tpl.open').forEach(el=>{
+    const ta=el.querySelector('.tpl-txt');
+    if(ta&&!ta.dataset.edited){const v=el.dataset.ver||'n';ta.value=fill(ta.dataset[v]);autoSize(ta);}
+  });
+}
+function fill(t){return t.split('{店名}').join(shopName());}
+function autoSize(ta){ta.style.height='auto';ta.style.height=Math.max(120,ta.scrollHeight+4)+'px';}
+
+function render(){
+  const el=document.getElementById('main');
+  let html='<div class="sec"><div class="sec-title">おためし 3シーン</div>';
+  ITEMS.forEach((item,i)=>{
+    const id='t_'+i;
+    const tag=item.free?'<span class="tag free">使える</span>':'<span class="tag smp">サンプル</span>';
+    let inner='';
+    if(item.free){
+      inner=`<div class="ver-tabs">
+          <button class="ver-btn on" data-v="n" onclick="setVer('${id}','n')">普通</button>
+          <button class="ver-btn" data-v="f" onclick="setVer('${id}','f')">フレンドリー</button>
+        </div>
+        <textarea class="tpl-txt" data-n="" data-f="" oninput="this.dataset.edited='1'"></textarea>
+        <div class="tpl-note">※「普通／フレンドリー」を選び、〇を書き換えてからコピーしてください</div>
+        <div class="tpl-actions">
+          <button class="btn-copy" onclick="copyTpl('${id}')">LINEにコピー</button>
+          <button class="btn-mail" onclick="copyTpl('${id}')">メールにコピー</button>
+        </div>
+        <div class="tpl-actions">
+          <button class="btn-undo" onclick="undoTpl('${id}')">元に戻す</button>
+        </div>`;
+    }else{
+      inner=`<textarea class="tpl-txt" readonly data-n="" data-f=""></textarea>
+        <div class="lock">
+          <p>🔒 これは中身のご確認用サンプルです。<br>全50シーン＋「フレンドリー版」もそのまま使えるのはフル版です。</p>
+          <a href="${SHOPLINK}">フル版（1,280円）を見る →</a>
+        </div>`;
+    }
+    html+=`<div class="tpl" id="${id}" data-ver="n">
+      <div class="tpl-head" onclick="toggle('${id}')">
+        <span class="tpl-no">${item.no}</span>
+        <span class="tpl-title">${item.title}（${item.cat}）</span>
+        ${tag}
+        <span class="tpl-arrow">▶</span>
+      </div>
+      <div class="tpl-body">${inner}</div>
+    </div>`;
+  });
+  html+='</div>';
+  el.innerHTML=html;
+  ITEMS.forEach((item,i)=>{
+    const ta=document.querySelector('#t_'+i+' .tpl-txt');
+    ta.dataset.n=item.n;ta.dataset.f=item.f;
+  });
+}
+function loadVer(el){
+  const ta=el.querySelector('.tpl-txt');
+  const v=el.dataset.ver||'n';
+  ta.value=fill(ta.dataset[v]);
+  delete ta.dataset.edited;
+  el.querySelectorAll('.ver-btn').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  autoSize(ta);
+}
+function toggle(id){
+  const el=document.getElementById(id);
+  const opening=!el.classList.contains('open');
+  document.querySelectorAll('.tpl.open').forEach(o=>{if(o!==el)o.classList.remove('open')});
+  el.classList.toggle('open');
+  if(opening)loadVer(el);
+}
+function setVer(id,v){
+  const el=document.getElementById(id);
+  el.dataset.ver=v;loadVer(el);
+}
+function copyTpl(id){
+  const ta=document.querySelector('#'+id+' .tpl-txt');
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(ta.value).then(()=>toast()).catch(()=>fallbackCopy(ta));
+  }else{fallbackCopy(ta)}
+}
+function fallbackCopy(ta){ta.removeAttribute('readonly');ta.select();try{document.execCommand('copy');toast()}catch(e){}}
+function undoTpl(id){loadVer(document.getElementById(id));}
+function toast(){
+  const t=document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+try{const s=localStorage.getItem('line_smp_shop');if(s)document.getElementById('shop-name').value=s;}catch(e){}
+render();
+toggle('t_0');
+</script>
+</body>
+</html>
