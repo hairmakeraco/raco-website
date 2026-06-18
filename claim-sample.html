@@ -118,7 +118,7 @@ function render(){
     const actions=item.free
       ? `<div class="tpl-actions">
            <button class="btn-line" onclick="copyTpl('${id}')">LINEにコピー</button>
-           <button class="btn-mail" onclick="mailTpl('${id}')">メールで送る</button>
+           <button class="btn-mail" onclick="copyTpl('${id}')">メールにコピー</button>
          </div>
          <div class="tpl-actions">
            <button class="btn-undo" onclick="undoTpl('${id}')">元に戻す</button>
