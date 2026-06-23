@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>受験カウントダウン</title>
+<!-- iPhoneのホーム画面に置いたときの設定 -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="受験まで">
+<meta name="theme-color" content="#0d1b3e">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif;
+    background: linear-gradient(160deg, #0d1b3e 0%, #1c3a6e 100%);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 100vh;
+    padding: 24px;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .exam {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #cfe0ff;
+    margin-bottom: 8px;
+  }
+  .label-top {
+    font-size: 1rem;
+    color: #9fb6e0;
+    margin-bottom: 18px;
+  }
+  .count-wrap {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 10px;
+    margin: 6px 0 22px;
+  }
+  .days {
+    font-size: 7.5rem;
+    font-weight: 800;
+    line-height: 1;
+    color: #ffd84d;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.35);
+    font-variant-numeric: tabular-nums;
+  }
+  .unit {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .date {
+    font-size: 1.05rem;
+    color: #cfe0ff;
+    margin-bottom: 4px;
+  }
+  .today {
+    font-size: 0.85rem;
+    color: #7e96c4;
+    margin-top: 28px;
+  }
+  .done {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #ffd84d;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+  <div class="label-top">受験本番まで</div>
+
+  <div id="main">
+    <div class="count-wrap">
+      <span class="days" id="days">--</span>
+      <span class="unit">日</span>
+    </div>
+    <div class="date">2026年9月12日（土）</div>
+  </div>
+
+  <div class="today" id="today"></div>
+
+<script>
+  // 受験日（年, 月-1, 日）
+  var exam = new Date(2026, 8, 12); // 8 = 9月
+  exam.setHours(0, 0, 0, 0);
+
+  function update() {
+    var now = new Date();
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var diff = Math.round((exam - today) / (1000 * 60 * 60 * 24));
+
+    var main = document.getElementById('main');
+    if (diff > 0) {
+      document.getElementById('days').textContent = diff;
+    } else if (diff === 0) {
+      main.innerHTML = '<div class="done">いよいよ今日が本番！<br>がんばってきてね🌸</div>';
+    } else {
+      main.innerHTML = '<div class="done">おつかれさま！<br>よくがんばったね🌸</div>';
+    }
+
+    var w = ['日','月','火','水','木','金','土'][now.getDay()];
+    document.getElementById('today').textContent =
+      '今日：' + now.getFullYear() + '年' + (now.getMonth()+1) + '月' + now.getDate() + '日（' + w + '）';
+  }
+
+  update();
+  // 日付が変わっても自動で更新（1分ごとに確認）
+  setInterval(update, 60 * 1000);
+</script>
+</body>
+</html>
