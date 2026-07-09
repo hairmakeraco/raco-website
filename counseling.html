@@ -185,6 +185,13 @@
     line-height: 24px;
     cursor: pointer;
   }
+  .more-links { display: flex; flex-wrap: wrap; gap: 8px; }
+  .more-links a {
+    flex: 1 1 calc(33% - 8px);
+    min-width: 100px;
+    text-align: center;
+    margin-top: 0;
+  }
   #overlay {
     display: none;
     position: fixed;
@@ -309,6 +316,8 @@
     <div id="menus"></div>
     <p class="r-title">お手入れアドバイス</p>
     <div class="advice"><ul id="adviceList"></ul></div>
+    <p class="r-title">もっと写真を見る（ホットペッパー）</p>
+    <div class="more-links" id="moreLinks"></div>
     <button class="reset" id="resetBtn">次のお客様用にリセット</button>
   </div>
 
@@ -354,14 +363,17 @@ function suggest(a) {
       } else {
         styles.push({name: "アップバングショート", kw: "アップバングショート", why: "直毛を活かした爽やかスタイル。ワックスだけで決まります。"});
         styles.push({name: "ベリーショート", kw: "ベリーショート", why: "お手入れがいちばん楽で、清潔感が出ます。"});
+        styles.push({name: "ソフトモヒカン", kw: "ソフトモヒカン", why: "トップに高さを出して、シャープで男らしい印象に。"});
       }
       if (a.iron === "yes") {
         styles.push({name: "センターパート", kw: "センターパート", why: "アイロンで軽く動きをつけると、今っぽい質感に決まります。"});
+        styles.push({name: "コンマヘア", kw: "コンマヘア", why: "前髪をアイロンでコンマ状に流す韓国風。アイロン派に人気です。"});
       }
     }
 
     if (a.cut === "mid") {
       styles.push({name: "ミディアムウルフ", kw: "ウルフ", why: "長さを残しつつ襟足に動きを出して、重く見えないミディアムに。"});
+      styles.push({name: "韓国風マッシュミディ", kw: "韓国マッシュ", why: "重めの前髪と丸みのあるシルエットで、柔らかい印象になります。"});
       if (a.iron === "yes") {
         styles.push({name: "センターパート", kw: "センターパート", why: "アイロンで軽く動きをつけると、今っぽい質感に決まります。"});
       }
@@ -394,15 +406,19 @@ function suggest(a) {
       if (kuseAri && a.shitsu === "hard") {
         styles.push({name: "あご下ラインの重めボブ", kw: "重めボブ", why: "くせと広がりを「重さ」でおさえるので、乾かすだけでまとまりやすいです。"});
         styles.push({name: "前下がりボブ", kw: "前下がりボブ", why: "襟足をすっきりさせつつ、顔まわりは長さを残して広がりをカバーします。"});
+        styles.push({name: "切りっぱなしロブ", kw: "切りっぱなしロブ", why: "肩につく長さで重さを残しつつ、雰囲気をガラッと変えられます。"});
       } else if (kuseAri) {
         styles.push({name: "ひし形ショートボブ", kw: "ひし形ショートボブ", why: "くせの動きをカールとして活かせるので、スタイリングが楽になります。"});
         styles.push({name: "くびれショート", kw: "くびれショート", why: "軽さのある襟足で、くせが自然な動きに見えます。"});
+        styles.push({name: "くせ活かしパーマ風ボブ", kw: "くせ毛ボブ", why: "くせをパーマのニュアンスとして活かして、乾かすだけで動きが出ます。"});
       } else if (a.shitsu === "soft") {
         styles.push({name: "ミニボブ（切りっぱなし風）", kw: "ミニボブ", why: "軟毛でも毛先に重さが出て、ぺたんとしにくいシルエットです。"});
         styles.push({name: "まるみショート", kw: "まるみショート", why: "トップにふんわり感を作りやすく、軟毛と相性◎です。"});
+        styles.push({name: "レイヤーボブ", kw: "レイヤーボブ", why: "表面に軽くレイヤーを入れて、ふんわり感と動きを出します。"});
       } else {
         styles.push({name: "まるみショート〜ショートボブ", kw: "まるみショート", why: "直毛を活かしたきれいなシルエットが出ます。"});
         styles.push({name: "前下がりボブ", kw: "前下がりボブ", why: "ラインがきれいに出る髪質なので、カットラインが映えます。"});
+        styles.push({name: "ハンサムショート", kw: "ハンサムショート", why: "直毛のシャープさを活かした、かっこいい系の人気スタイルです。"});
       }
       if (a.iron === "yes") {
         styles.push({name: "外ハネボブ", kw: "外ハネボブ", why: "アイロンでサッと外ハネにするだけで今っぽく決まります。"});
@@ -413,10 +429,13 @@ function suggest(a) {
       if (a.iron === "yes") {
         styles.push({name: "くびれミディ", kw: "くびれミディ", why: "コテ・アイロンで巻いたときに一番映えるレイヤー設計にします。"});
         styles.push({name: "レイヤーミディ", kw: "レイヤーミディアム", why: "巻いたカールに動きが出て、スタイリングが楽しくなります。"});
+        styles.push({name: "韓国風ミディアム", kw: "韓国風ミディアム", why: "顔まわりのレイヤー（ヨシンモリ風）で、巻いたときの華やかさが際立ちます。"});
       } else if (kuseAri) {
         styles.push({name: "重めミディアム（ローレイヤー）", kw: "重めミディアム", why: "乾かすだけでまとまるよう、レイヤーは控えめに重さを残します。"});
+        styles.push({name: "ゆるふわパーマ風", kw: "ゆるふわパーマ", why: "くせを活かしてパーマ風の柔らかい動きに。朝のセットも楽です。"});
       } else {
         styles.push({name: "ワンカールミディ", kw: "ワンカールミディアム", why: "毛先が自然に内に入るカットラインで、朝のセットがほぼ不要です。"});
+        styles.push({name: "鎖骨ミディ", kw: "鎖骨ミディ", why: "鎖骨ラインの長さで結べて、伸ばし途中でも扱いやすい人気の長さです。"});
       }
       if (a.shitsu === "soft") {
         styles.push({name: "表面レイヤーのふんわりミディ", kw: "ふんわりミディアム", why: "軟毛のぺたんこ対策に、表面だけレイヤーでボリュームを出します。"});
@@ -520,6 +539,28 @@ document.getElementById("goBtn").addEventListener("click", () => {
     `<div class="style-card menu-card"><h3>＋ ${m.name}</h3><p>${m.why}</p></div>`).join("");
 
   document.getElementById("adviceList").innerHTML = r.advice.map(t => `<li>${t}</li>`).join("");
+
+  // もっと写真を見る（ホットペッパーのカタログへのリンク・男女で切り替え）
+  const HP = "https://beauty.hotpepper.jp/catalog/";
+  const catalogs = (answers.gender === "mens")
+    ? [
+        ["ベリーショート", HP + "mens/word" + encodeURIComponent("ベリーショート") + "/"],
+        ["ショート",       HP + "mens/word" + encodeURIComponent("ショート") + "/"],
+        ["マッシュ",       HP + "mens/word" + encodeURIComponent("マッシュ") + "/"],
+        ["センターパート", HP + "mens/word" + encodeURIComponent("センターパート") + "/"],
+        ["ツーブロック",   HP + "mens/word" + encodeURIComponent("ツーブロック") + "/"],
+        ["人気ランキング", HP + "mens/ranking/"],
+      ]
+    : [
+        ["ショート",       HP + "ladys/lenHL04/"],
+        ["ボブ",           HP + "ladys/word" + encodeURIComponent("ボブ") + "/"],
+        ["ミディアム",     HP + "ladys/lenHL03/"],
+        ["セミロング",     HP + "ladys/lenHL02/"],
+        ["ロング",         HP + "ladys/lenHL01/"],
+        ["人気ランキング", HP + "ladys/ranking/"],
+      ];
+  document.getElementById("moreLinks").innerHTML = catalogs.map(c =>
+    `<a class="photo-link" target="_blank" rel="noopener" href="${c[1]}">${c[0]}</a>`).join("");
 
   const result = document.getElementById("result");
   result.classList.add("show");
