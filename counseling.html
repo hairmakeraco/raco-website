@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>カウンセリング スタイル提案シート</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", sans-serif;
+    background: #faf7f2;
+    color: #3a3330;
+    padding-bottom: 60px;
+  }
+  header {
+    background: #4a6b5d;
+    color: #fff;
+    padding: 18px 16px 14px;
+    text-align: center;
+  }
+  header h1 { font-size: 19px; letter-spacing: 2px; }
+  header p { font-size: 12px; opacity: .85; margin-top: 4px; letter-spacing: 1px; }
+  main { max-width: 560px; margin: 0 auto; padding: 16px 14px; }
+
+  .q {
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px 14px 16px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .q h2 {
+    font-size: 15px;
+    margin-bottom: 10px;
+    color: #4a6b5d;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .q h2 .num {
+    background: #4a6b5d;
+    color: #fff;
+    font-size: 12px;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+  .opts button {
+    flex: 1 1 calc(50% - 8px);
+    min-width: 120px;
+    padding: 13px 8px;
+    font-size: 15px;
+    border: 2px solid #d8d2c8;
+    border-radius: 10px;
+    background: #fdfcfa;
+    color: #3a3330;
+    cursor: pointer;
+  }
+  .opts.three button { flex: 1 1 calc(33% - 8px); min-width: 90px; }
+  .opts button.on {
+    background: #4a6b5d;
+    border-color: #4a6b5d;
+    color: #fff;
+    font-weight: bold;
+  }
+
+  .go {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    font-size: 17px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #fff;
+    background: #c96f4a;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    margin: 6px 0 10px;
+  }
+  .go:disabled { background: #d8d2c8; cursor: default; }
+  .hint { text-align: center; font-size: 12px; color: #a09585; margin-bottom: 16px; }
+
+  #result { display: none; }
+  #result.show { display: block; }
+  .r-title {
+    font-size: 16px;
+    color: #4a6b5d;
+    margin: 18px 0 10px;
+    padding-left: 10px;
+    border-left: 4px solid #c96f4a;
+    font-weight: bold;
+  }
+  .style-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    border-left: 5px solid #4a6b5d;
+  }
+  .style-card h3 { font-size: 16px; margin-bottom: 5px; }
+  .style-card p { font-size: 13.5px; line-height: 1.6; color: #6b6259; }
+  .photo-link {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 9px 14px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #4a6b5d;
+    background: #eef3f0;
+    border: 1.5px solid #4a6b5d;
+    border-radius: 8px;
+    text-decoration: none;
+  }
+  .menu-card { border-left-color: #c96f4a; background: #fdf3ec; }
+  .advice {
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .advice li {
+    font-size: 13.5px;
+    line-height: 1.7;
+    margin-left: 1.2em;
+    margin-bottom: 6px;
+    color: #6b6259;
+  }
+  .reset {
+    display: block;
+    width: 100%;
+    margin-top: 18px;
+    padding: 13px;
+    font-size: 14px;
+    color: #a09585;
+    background: none;
+    border: 2px solid #d8d2c8;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  footer { text-align: center; font-size: 11px; color: #c4bbae; margin-top: 24px; }
+
+  .cam-btn {
+    display: block;
+    width: 100%;
+    padding: 13px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #4a6b5d;
+    background: #eef3f0;
+    border: 2px dashed #4a6b5d;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .cam-note { font-size: 11.5px; color: #a09585; margin-top: 8px; text-align: center; }
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .photo-item { position: relative; }
+  .photo-item img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+  }
+  .photo-item .del {
+    position: absolute;
+    top: -6px; right: -6px;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: none;
+    background: #c96f4a;
+    color: #fff;
+    font-size: 14px;
+    line-height: 24px;
+    cursor: pointer;
+  }
+  #overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.9);
+    z-index: 10;
+    align-items: center;
+    justify-content: center;
+  }
+  #overlay.show { display: flex; }
+  #overlay img { max-width: 96%; max-height: 92%; border-radius: 8px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>スタイル提案シート</h1>
+  <p>カウンセリングで一緒に選びましょう</p>
+</header>
+<main>
+
+  <div class="q">
+    <h2><span class="num">📷</span>今の髪を撮影（任意）</h2>
+    <button class="cam-btn" id="camBtn">📷 写真を撮る（バックスタイルなど）</button>
+    <input type="file" accept="image/*" capture="environment" id="camInput" style="display:none">
+    <div class="photo-grid" id="photoGrid"></div>
+    <p class="cam-note">写真はどこにも保存されません。この画面を閉じると消えます。</p>
+  </div>
+
+  <div class="q">
+    <h2><span class="num">1</span>お客様は？</h2>
+    <div class="opts" data-key="gender">
+      <button data-v="ladys">女性</button>
+      <button data-v="mens">男性</button>
+    </div>
+  </div>
+
+  <div class="q">
+    <h2><span class="num">2</span>今日はどれくらい切る？</h2>
+    <div class="opts" data-key="cut">
+      <button data-v="trim">毛先をそろえる<br>（1〜2cm）</button>
+      <button data-v="little">少し切る<br>（3〜5cm）</button>
+      <button data-v="mid">しっかり切る<br>（5〜10cm）</button>
+      <button data-v="big">バッサリ・<br>イメチェン</button>
+    </div>
+  </div>
+
+  <div class="q">
+    <h2><span class="num">3</span>髪質は？</h2>
+    <div class="opts three" data-key="shitsu">
+      <button data-v="soft">軟毛</button>
+      <button data-v="normal">普通</button>
+      <button data-v="hard">硬毛</button>
+    </div>
+  </div>
+
+  <div class="q">
+    <h2><span class="num">4</span>毛量は？</h2>
+    <div class="opts three" data-key="ryo">
+      <button data-v="few">少なめ</button>
+      <button data-v="normal">普通</button>
+      <button data-v="many">多め</button>
+    </div>
+  </div>
+
+  <div class="q">
+    <h2><span class="num">5</span>くせは？</h2>
+    <div class="opts three" data-key="kuse">
+      <button data-v="none">直毛</button>
+      <button data-v="yes">ややくせ</button>
+      <button data-v="strong">くせ強め</button>
+    </div>
+  </div>
+
+  <div class="q">
+    <h2><span class="num">6</span>前髪はどうする？</h2>
+    <div class="opts three" data-key="bangs">
+      <button data-v="make">つくる・<br>整える</button>
+      <button data-v="grow">伸ばし中</button>
+      <button data-v="keep">今のまま</button>
+    </div>
+  </div>
+
+  <div class="q">
+    <h2><span class="num">7</span>朝のセットにかけられる時間は？</h2>
+    <div class="opts three" data-key="time">
+      <button data-v="zero">ほぼ0分</button>
+      <button data-v="five">5分くらい</button>
+      <button data-v="ten">10分以上OK</button>
+    </div>
+  </div>
+
+  <div class="q">
+    <h2><span class="num">8</span>ドライヤーで乾かす？</h2>
+    <div class="opts" data-key="dryer">
+      <button data-v="yes">乾かす</button>
+      <button data-v="no">自然乾燥が多い</button>
+    </div>
+  </div>
+
+  <div class="q">
+    <h2><span class="num">9</span>洗い流さないトリートメントは？</h2>
+    <div class="opts" data-key="outbath">
+      <button data-v="yes">使っている</button>
+      <button data-v="no">使っていない</button>
+    </div>
+  </div>
+
+  <div class="q">
+    <h2><span class="num">10</span>コテ・アイロンは使う？</h2>
+    <div class="opts" data-key="iron">
+      <button data-v="yes">使う</button>
+      <button data-v="no">使わない</button>
+    </div>
+  </div>
+
+  <button class="go" id="goBtn" disabled>おすすめスタイルを見る</button>
+  <p class="hint" id="hint">全部の項目を選ぶとボタンが押せます</p>
+
+  <div id="result">
+    <p class="r-title">おすすめスタイル</p>
+    <div id="styles"></div>
+    <div id="menus"></div>
+    <p class="r-title">お手入れアドバイス</p>
+    <div class="advice"><ul id="adviceList"></ul></div>
+    <button class="reset" id="resetBtn">次のお客様用にリセット</button>
+  </div>
+
+  <footer>Hair make Raco ｜ 入力内容・写真はどこにも保存されません</footer>
+</main>
+
+<div id="overlay"><img id="overlayImg" alt="拡大写真"></div>
+
+<script>
+const answers = {};
+const KEYS = ["gender", "cut", "shitsu", "ryo", "kuse", "bangs", "time", "dryer", "outbath", "iron"];
+
+document.querySelectorAll(".opts").forEach(group => {
+  group.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      group.querySelectorAll("button").forEach(b => b.classList.remove("on"));
+      btn.classList.add("on");
+      answers[group.dataset.key] = btn.dataset.v;
+      const ready = KEYS.every(k => answers[k]);
+      document.getElementById("goBtn").disabled = !ready;
+      document.getElementById("hint").style.display = ready ? "none" : "block";
+    });
+  });
+});
+
+function suggest(a) {
+  const styles = [];   // {name, why}
+  const menus = [];    // 追加メニュー提案
+  const advice = [];
+
+  const kuseAri = (a.kuse !== "none");
+
+  if (a.gender === "mens") {
+    // ==== メンズのスタイル提案 ====
+    if (a.cut === "big") {
+      if (kuseAri && (a.shitsu === "hard" || a.ryo === "many")) {
+        styles.push({name: "ツーブロック×ショート", kw: "ツーブロック", why: "サイドを刈り上げて、くせと量をすっきり。伸びてきても扱いやすいです。"});
+      }
+      if (kuseAri) {
+        styles.push({name: "くせ毛マッシュ", kw: "くせ毛マッシュ", why: "くせをパーマ風の動きとして活かせるので、朝はほぼノーセットでOKです。"});
+      } else if (a.shitsu === "soft") {
+        styles.push({name: "マッシュショート", kw: "マッシュショート", why: "軟毛でも重さを残す設計で、ふんわりしたシルエットが作れます。"});
+      } else {
+        styles.push({name: "アップバングショート", kw: "アップバングショート", why: "直毛を活かした爽やかスタイル。ワックスだけで決まります。"});
+        styles.push({name: "ベリーショート", kw: "ベリーショート", why: "お手入れがいちばん楽で、清潔感が出ます。"});
+      }
+      if (a.iron === "yes") {
+        styles.push({name: "センターパート", kw: "センターパート", why: "アイロンで軽く動きをつけると、今っぽい質感に決まります。"});
+      }
+    }
+
+    if (a.cut === "mid") {
+      styles.push({name: "ミディアムウルフ", kw: "ウルフ", why: "長さを残しつつ襟足に動きを出して、重く見えないミディアムに。"});
+      if (a.iron === "yes") {
+        styles.push({name: "センターパート", kw: "センターパート", why: "アイロンで軽く動きをつけると、今っぽい質感に決まります。"});
+      }
+      if (kuseAri) {
+        styles.push({name: "くせを活かしたニュアンスミディ", kw: "ニュアンスパーマ", why: "くせをパーマ風の質感として活かして、セットを楽にします。"});
+      }
+    }
+
+    if (a.cut === "little") {
+      styles.push({name: "今の形キープ＋量感・耳まわり整え", why: "シルエットは変えずに、すっきり感を優先して整えます。"});
+      if (a.ryo === "many" || a.shitsu === "hard") {
+        styles.push({name: "刈り上げ・ツーブロックのメンテ", kw: "ツーブロック", why: "サイドと襟足を整えるだけで、清潔感がぐっと戻ります。"});
+      }
+    }
+
+    if (a.cut === "trim") {
+      styles.push({name: "耳まわり・襟足の整え＋量感調整", why: "長さの印象は変えずに、清潔感を回復します。"});
+    }
+
+    if (a.bangs === "make") {
+      styles.push({name: "前髪を下ろすダウンバング", kw: "ダウンバング", why: "前髪ありだと柔らかい印象に。マッシュ系との相性も◎です。"});
+    }
+
+    if ((a.shitsu === "soft" || a.ryo === "few") && !kuseAri) {
+      menus.push({name: "メンズパーマもおすすめ", why: "トップのボリュームと動きが出て、毎朝のセットが楽になります。"});
+    }
+  } else {
+    // ==== レディースのスタイル提案 ====
+    if (a.cut === "big") {
+      if (kuseAri && a.shitsu === "hard") {
+        styles.push({name: "あご下ラインの重めボブ", kw: "重めボブ", why: "くせと広がりを「重さ」でおさえるので、乾かすだけでまとまりやすいです。"});
+        styles.push({name: "前下がりボブ", kw: "前下がりボブ", why: "襟足をすっきりさせつつ、顔まわりは長さを残して広がりをカバーします。"});
+      } else if (kuseAri) {
+        styles.push({name: "ひし形ショートボブ", kw: "ひし形ショートボブ", why: "くせの動きをカールとして活かせるので、スタイリングが楽になります。"});
+        styles.push({name: "くびれショート", kw: "くびれショート", why: "軽さのある襟足で、くせが自然な動きに見えます。"});
+      } else if (a.shitsu === "soft") {
+        styles.push({name: "ミニボブ（切りっぱなし風）", kw: "ミニボブ", why: "軟毛でも毛先に重さが出て、ぺたんとしにくいシルエットです。"});
+        styles.push({name: "まるみショート", kw: "まるみショート", why: "トップにふんわり感を作りやすく、軟毛と相性◎です。"});
+      } else {
+        styles.push({name: "まるみショート〜ショートボブ", kw: "まるみショート", why: "直毛を活かしたきれいなシルエットが出ます。"});
+        styles.push({name: "前下がりボブ", kw: "前下がりボブ", why: "ラインがきれいに出る髪質なので、カットラインが映えます。"});
+      }
+      if (a.iron === "yes") {
+        styles.push({name: "外ハネボブ", kw: "外ハネボブ", why: "アイロンでサッと外ハネにするだけで今っぽく決まります。"});
+      }
+    }
+
+    if (a.cut === "mid") {
+      if (a.iron === "yes") {
+        styles.push({name: "くびれミディ", kw: "くびれミディ", why: "コテ・アイロンで巻いたときに一番映えるレイヤー設計にします。"});
+        styles.push({name: "レイヤーミディ", kw: "レイヤーミディアム", why: "巻いたカールに動きが出て、スタイリングが楽しくなります。"});
+      } else if (kuseAri) {
+        styles.push({name: "重めミディアム（ローレイヤー）", kw: "重めミディアム", why: "乾かすだけでまとまるよう、レイヤーは控えめに重さを残します。"});
+      } else {
+        styles.push({name: "ワンカールミディ", kw: "ワンカールミディアム", why: "毛先が自然に内に入るカットラインで、朝のセットがほぼ不要です。"});
+      }
+      if (a.shitsu === "soft") {
+        styles.push({name: "表面レイヤーのふんわりミディ", kw: "ふんわりミディアム", why: "軟毛のぺたんこ対策に、表面だけレイヤーでボリュームを出します。"});
+      }
+      if (a.shitsu === "hard") {
+        styles.push({name: "量感調整ミディ", kw: "ミディアムレイヤー", why: "中の量をしっかり調整して、硬毛の広がり・重さを軽くします。"});
+      }
+    }
+
+    if (a.cut === "little") {
+      styles.push({name: "今の形キープ＋量感・質感調整", why: "シルエットは変えずに、扱いやすさを優先して整えます。"});
+      if (a.iron === "yes") {
+        styles.push({name: "顔まわりレイヤーのプラス", kw: "顔まわりレイヤー", why: "巻いたときに顔まわりに動きが出て、印象が変わります。"});
+      } else if (a.shitsu === "soft") {
+        styles.push({name: "表面に軽くレイヤー", kw: "ふんわりレイヤー", why: "乾かすだけでトップがふんわりしやすくなります。"});
+      }
+    }
+
+    if (a.cut === "trim") {
+      styles.push({name: "毛先のダメージカット＋質感整え", why: "長さはキープして、毛先のパサつきをリセットします。"});
+      if (kuseAri) {
+        styles.push({name: "内側の量感調整", why: "長さを変えずに、くせによる広がりだけ軽くします。"});
+      }
+    }
+
+    if (a.ryo === "many" && (a.cut === "trim" || a.cut === "little")) {
+      styles.push({name: "内側の量感調整", why: "長さを変えずに、多い部分の量だけ軽くして広がりをおさえます。"});
+    }
+    if (a.bangs === "make") {
+      styles.push({name: "前髪カットで印象チェンジ", kw: "シースルーバング", why: "顔の印象がいちばん変わるのが前髪。軽めのシースルーバングなら今っぽく、お手入れも簡単です。"});
+    }
+  }
+
+  // 同じスタイルがダブったら1つにする
+  const seenStyles = new Set();
+  const uniqueStyles = styles.filter(s => !seenStyles.has(s.name) && seenStyles.add(s.name));
+
+  // ---- 追加メニュー提案 ----
+  if (a.kuse === "strong" && a.iron === "yes") {
+    menus.push({name: "縮毛矯正・ストレートメニューもおすすめ", why: "毎日のアイロン時間がぐっと短くなり、熱ダメージも減らせます。"});
+  }
+  if (a.kuse === "strong" && a.dryer === "no") {
+    menus.push({name: "縮毛矯正・ストレートメニューもおすすめ", why: "自然乾燥でもまとまりやすくなり、朝が楽になります。"});
+  }
+  if (a.outbath === "no" && a.iron === "yes") {
+    menus.push({name: "サロントリートメント＋自宅用の洗い流さないトリートメント", why: "コテ・アイロンの熱から髪を守るベース作りに。"});
+  }
+
+  // 同じメニュー提案がダブったら1つにする
+  const seen = new Set();
+  const uniqueMenus = menus.filter(m => !seen.has(m.name) && seen.add(m.name));
+
+  // ---- お手入れアドバイス ----
+  if (a.dryer === "no") {
+    advice.push("自然乾燥は、くせ・広がり・パサつきの大きな原因です。根元だけでもドライヤーで乾かすと仕上がりが変わります。");
+  }
+  if (a.outbath === "no") {
+    advice.push("洗い流さないトリートメントを乾かす前につけると、毛先のまとまりとツヤが続きやすくなります。");
+  }
+  if (a.iron === "yes") {
+    advice.push("コテ・アイロンは150〜160℃を目安に、同じ場所に長く当てないのがダメージ予防のコツです。");
+  }
+  if (a.shitsu === "soft") {
+    advice.push("軟毛は重いオイルをつけすぎるとぺたんとします。軽めのミルクやオイルを毛先中心に少量がおすすめです。");
+  }
+  if (a.shitsu === "hard") {
+    advice.push("硬毛はオイルでしっとりまとめるとツヤが出て扱いやすくなります。");
+  }
+  if (a.ryo === "many") {
+    advice.push("毛量多めの方は、1〜1.5ヶ月ごとの量感調整で広がりにくい状態をキープできます。");
+  }
+  if (a.ryo === "few") {
+    advice.push("毛量少なめの方は、すきすぎないカットがボリュームキープのコツです。");
+  }
+  if (a.bangs === "grow") {
+    advice.push("伸ばし中の前髪は、顔まわりに軽くレイヤーを入れて横に流れるようにすると邪魔になりにくいです。");
+  }
+  if (a.time === "zero") {
+    advice.push("朝のセット時間ほぼ0分でもキマるよう、乾かすだけでまとまるカットラインを優先します。");
+  }
+  if (advice.length === 0) {
+    advice.push("お手入れの習慣はとても良い状態です。今のケアをぜひ続けてください。");
+  }
+
+  return { styles: uniqueStyles, menus: uniqueMenus, advice };
+}
+
+document.getElementById("goBtn").addEventListener("click", () => {
+  const r = suggest(answers);
+
+  document.getElementById("styles").innerHTML = r.styles.map(s => {
+    const seg = (answers.gender === "mens") ? "mens" : "ladys";
+    const link = s.kw
+      ? `<a class="photo-link" target="_blank" rel="noopener"
+           href="https://beauty.hotpepper.jp/catalog/${seg}/word${encodeURIComponent(s.kw)}/">📷 ホットペッパーで写真を見る</a>`
+      : "";
+    return `<div class="style-card"><h3>${s.name}</h3><p>${s.why}</p>${link}</div>`;
+  }).join("");
+
+  document.getElementById("menus").innerHTML = r.menus.map(m =>
+    `<div class="style-card menu-card"><h3>＋ ${m.name}</h3><p>${m.why}</p></div>`).join("");
+
+  document.getElementById("adviceList").innerHTML = r.advice.map(t => `<li>${t}</li>`).join("");
+
+  const result = document.getElementById("result");
+  result.classList.add("show");
+  result.scrollIntoView({ behavior: "smooth" });
+});
+
+// ---- カメラ（写真はメモリ上のみ・保存なし）----
+const photos = [];  // objectURLの一覧
+const camInput = document.getElementById("camInput");
+const photoGrid = document.getElementById("photoGrid");
+
+document.getElementById("camBtn").addEventListener("click", () => camInput.click());
+
+camInput.addEventListener("change", () => {
+  if (camInput.files && camInput.files[0]) {
+    photos.push(URL.createObjectURL(camInput.files[0]));
+    camInput.value = "";
+    renderPhotos();
+  }
+});
+
+function renderPhotos() {
+  photoGrid.innerHTML = photos.map((url, i) =>
+    `<div class="photo-item">
+       <img src="${url}" alt="撮影写真${i + 1}" data-i="${i}">
+       <button class="del" data-i="${i}" aria-label="削除">✕</button>
+     </div>`).join("");
+
+  photoGrid.querySelectorAll("img").forEach(img => {
+    img.addEventListener("click", () => {
+      document.getElementById("overlayImg").src = img.src;
+      document.getElementById("overlay").classList.add("show");
+    });
+  });
+  photoGrid.querySelectorAll(".del").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const i = Number(btn.dataset.i);
+      URL.revokeObjectURL(photos[i]);
+      photos.splice(i, 1);
+      renderPhotos();
+    });
+  });
+}
+
+document.getElementById("overlay").addEventListener("click", () => {
+  document.getElementById("overlay").classList.remove("show");
+});
+
+function clearPhotos() {
+  photos.forEach(url => URL.revokeObjectURL(url));
+  photos.length = 0;
+  renderPhotos();
+}
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+  KEYS.forEach(k => delete answers[k]);
+  document.querySelectorAll(".opts button").forEach(b => b.classList.remove("on"));
+  document.getElementById("result").classList.remove("show");
+  document.getElementById("goBtn").disabled = true;
+  document.getElementById("hint").style.display = "block";
+  clearPhotos();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+</script>
+</body>
+</html>
