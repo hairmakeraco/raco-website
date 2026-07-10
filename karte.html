@@ -280,6 +280,7 @@
         <div class="f-item full"><label>髪の情報（タップで選択）</label>
           <div class="chips" id="hairChips"></div>
         </div>
+        <div class="f-item full"><label>お客様のこと（趣味・家族・会話のネタなど）</label><textarea id="cPerson" placeholder="例：お酒好き（日本酒）／お孫さん2人／ゴルフが趣味"></textarea></div>
         <div class="f-item full"><label>次回に向けてのメモ</label><textarea id="cNext" placeholder="例：次回プレミアム縮毛矯正を提案／木曜午前の来店希望"></textarea></div>
       </div>
       <div class="btn-row">
@@ -524,6 +525,10 @@ async function showDetail(id) {
       <div class="tags">${(c.hair || []).map(t => `<span class="tag">${esc(t)}</span>`).join("") || '<span style="font-size:13px;color:#a09585">未登録（✏編集から追加できます）</span>'}</div>
     </div>
     <div class="panel">
+      <h2>お客様のこと（会話メモ）</h2>
+      <div class="next-memo" style="background:#eef3f0;">${esc(c.personMemo) || "（未登録。✏編集から「お酒好き」「お孫さん2人」など書けます）"}</div>
+    </div>
+    <div class="panel">
       <h2>次回に向けてのメモ</h2>
       <div class="next-memo">${esc(c.nextMemo) || "（メモなし）"}</div>
     </div>
@@ -533,7 +538,7 @@ async function showDetail(id) {
       <div id="visitList">
       ${c.visits.map((v, vi) => `
         <div class="visit">
-          <div class="date">${v.date}</div>
+          <div class="date">${v.date}｜${c.visits.length - vi}回目の来店</div>
           <div class="menu">${esc(v.menu)}${v.price ? `<span class="price">　¥${Number(v.price).toLocaleString()}</span>` : ""}</div>
           <div class="detail">${esc(v.detail)}</div>
           <div class="photo-row" data-vi="${vi}"></div>
@@ -610,6 +615,7 @@ function openCustForm(id) {
   document.getElementById("cGender").value = c ? (c.gender || "女性") : "女性";
   document.getElementById("cFirst").value = c ? (c.first || "") : new Date().toISOString().slice(0, 10);
   document.getElementById("cAlert").value = c ? (c.alert || "") : "";
+  document.getElementById("cPerson").value = c ? (c.personMemo || "") : "";
   document.getElementById("cNext").value = c ? (c.nextMemo || "") : "";
   buildChips("hairChips", HAIR_TAGS, c ? c.hair : []);
   document.getElementById("delCustBtn").style.display = c ? "block" : "none";
@@ -637,6 +643,7 @@ document.getElementById("saveCustBtn").addEventListener("click", async () => {
   c.first = document.getElementById("cFirst").value;
   c.alert = document.getElementById("cAlert").value.trim();
   c.hair = chipValues("hairChips");
+  c.personMemo = document.getElementById("cPerson").value.trim();
   c.nextMemo = document.getElementById("cNext").value.trim();
   c.updatedAt = now;
   await saveData();
