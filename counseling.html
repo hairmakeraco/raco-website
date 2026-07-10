@@ -447,6 +447,7 @@ function suggest(a) {
 
     if (a.cut === "little") {
       styles.push({name: "今の形キープ＋量感・質感調整", why: "シルエットは変えずに、扱いやすさを優先して整えます。"});
+      styles.push({name: "レイヤーで動きをプラス", kw: "レイヤーカット", why: "長さはほぼ変えずに、レイヤーで軽さと動きを足せます。"});
       if (a.iron === "yes") {
         styles.push({name: "顔まわりレイヤーのプラス", kw: "顔まわりレイヤー", why: "巻いたときに顔まわりに動きが出て、印象が変わります。"});
       } else if (a.shitsu === "soft") {
@@ -549,14 +550,21 @@ document.getElementById("goBtn").addEventListener("click", () => {
         ["マッシュ",       HP + "mens/word" + encodeURIComponent("マッシュ") + "/"],
         ["センターパート", HP + "mens/word" + encodeURIComponent("センターパート") + "/"],
         ["ツーブロック",   HP + "mens/word" + encodeURIComponent("ツーブロック") + "/"],
+        ["ウルフ",         HP + "mens/word" + encodeURIComponent("ウルフ") + "/"],
+        ["パーマ",         HP + "mens/word" + encodeURIComponent("パーマ") + "/"],
+        ["アップバング",   HP + "mens/word" + encodeURIComponent("アップバング") + "/"],
         ["人気ランキング", HP + "mens/ranking/"],
       ]
     : [
+        ["ベリーショート", HP + "ladys/lenHL05/"],
         ["ショート",       HP + "ladys/lenHL04/"],
         ["ボブ",           HP + "ladys/word" + encodeURIComponent("ボブ") + "/"],
         ["ミディアム",     HP + "ladys/lenHL03/"],
         ["セミロング",     HP + "ladys/lenHL02/"],
         ["ロング",         HP + "ladys/lenHL01/"],
+        ["パーマ",         HP + "ladys/word" + encodeURIComponent("パーマ") + "/"],
+        ["韓国ヘア",       HP + "ladys/word" + encodeURIComponent("韓国ヘア") + "/"],
+        ["ウルフ",         HP + "ladys/word" + encodeURIComponent("ウルフ") + "/"],
         ["人気ランキング", HP + "ladys/ranking/"],
       ];
   document.getElementById("moreLinks").innerHTML = catalogs.map(c =>
