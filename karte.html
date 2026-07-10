@@ -443,6 +443,8 @@ document.getElementById("openBtn").addEventListener("click", async () => {
   }
   try {
     let handle = await kvGet("dir");
+    // 以前に「Racoカルテ」以外のフォルダを選んでいた場合はやり直す
+    if (handle && handle.name !== "Racoカルテ") handle = null;
     if (handle) {
       const p = await handle.requestPermission({ mode: "readwrite" });
       if (p !== "granted") handle = null;
