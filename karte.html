@@ -239,8 +239,8 @@
     <div class="panel start-box">
       <h2>カルテを開く</h2>
       <p>下のボタンを押すとフォルダ選択の画面が出ます。<br>
-      <b>「Racoカルテ」をダブルクリック</b>して、<br>
-      右下の<b>「フォルダーの選択」</b>を押してください。</p>
+      そのまま右下の<b>「フォルダーの選択」</b>を押すだけでOKです。<br>
+      （保存用の「Racoカルテ」フォルダは自動で作られます）</p>
       <button class="btn-main w100" id="openBtn" style="font-size:17px; padding:16px;">📂 カルテのフォルダを開く</button>
       <p class="note" id="startNote">データはこのパソコンのOneDriveフォルダにだけ保存されます。<br>インターネット上には公開されません。</p>
     </div>
@@ -449,6 +449,10 @@ document.getElementById("openBtn").addEventListener("click", async () => {
     }
     if (!handle) {
       handle = await window.showDirectoryPicker({ mode: "readwrite", startIn: "documents" });
+      // 選んだ場所が「Racoカルテ」でなければ、その中に自動で作って使う
+      if (handle.name !== "Racoカルテ") {
+        handle = await handle.getDirectoryHandle("Racoカルテ", { create: true });
+      }
       await kvSet("dir", handle);
     }
     dirHandle = handle;
