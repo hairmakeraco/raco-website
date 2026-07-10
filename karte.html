@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Raco 電子カルテ</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+    background: #faf7f2;
+    color: #3a3330;
+    padding-bottom: 60px;
+  }
+  header {
+    background: #4a6b5d;
+    color: #fff;
+    padding: 14px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  header h1 { font-size: 18px; letter-spacing: 2px; }
+  #saveStatus { font-size: 12px; opacity: .9; }
+  main { max-width: 760px; margin: 0 auto; padding: 14px; }
+
+  .panel {
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .panel h2 {
+    font-size: 14px;
+    color: #4a6b5d;
+    border-left: 4px solid #c96f4a;
+    padding-left: 8px;
+    margin-bottom: 10px;
+  }
+  .f-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; }
+  @media (max-width: 520px) { .f-grid { grid-template-columns: 1fr; } }
+  .f-item { display: flex; flex-direction: column; }
+  .f-item label { font-size: 12px; color: #a09585; margin-bottom: 4px; }
+  .f-item input, .f-item select, .f-item textarea {
+    padding: 10px 11px;
+    font-size: 15px;
+    border: 2px solid #d8d2c8;
+    border-radius: 8px;
+    background: #fdfcfa;
+    width: 100%;
+    font-family: inherit;
+  }
+  .f-item textarea { min-height: 72px; resize: vertical; }
+  .full { grid-column: 1 / -1; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+  .chips button {
+    padding: 9px 13px;
+    font-size: 14px;
+    border: 2px solid #d8d2c8;
+    border-radius: 999px;
+    background: #fdfcfa;
+    color: #3a3330;
+    cursor: pointer;
+  }
+  .chips button.on { background: #4a6b5d; border-color: #4a6b5d; color: #fff; font-weight: bold; }
+
+  .btn-main {
+    padding: 13px 18px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #fff;
+    background: #4a6b5d;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .btn-accent { background: #c96f4a; }
+  .btn-sub {
+    padding: 13px 18px;
+    font-size: 14px;
+    color: #6b6259;
+    background: #fff;
+    border: 2px solid #d8d2c8;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .btn-danger {
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #b73232;
+    background: none;
+    border: 1.5px solid #d64545;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .btn-row { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+  .btn-row .grow { flex: 1; }
+  .w100 { width: 100%; }
+
+  .search {
+    width: 100%;
+    padding: 13px 14px;
+    font-size: 16px;
+    border: 2px solid #d8d2c8;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    background: #fff;
+  }
+  .count { font-size: 13px; color: #a09585; margin: 4px 2px 8px; }
+  .cust {
+    background: #fff;
+    border-radius: 12px;
+    padding: 13px 14px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    border-left: 5px solid #4a6b5d;
+  }
+  .cust .info h3 { font-size: 16px; }
+  .cust .info .kana { font-size: 11px; color: #a09585; }
+  .cust .info .last { font-size: 12px; color: #6b6259; margin-top: 3px; }
+  .cust .arrow { color: #c4bbae; font-size: 18px; }
+  .alert-dot {
+    display: inline-block;
+    background: #d64545;
+    color: #fff;
+    font-size: 10px;
+    padding: 1px 7px;
+    border-radius: 999px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  .back {
+    background: none;
+    border: none;
+    color: #4a6b5d;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 4px 0;
+    margin-bottom: 10px;
+  }
+  .prof-name { font-size: 20px; font-weight: bold; }
+  .prof-kana { font-size: 12px; color: #a09585; margin-bottom: 8px; }
+  .prof-row { display: flex; font-size: 13.5px; line-height: 1.9; }
+  .prof-row .lbl { width: 100px; color: #a09585; flex-shrink: 0; }
+  .alert-box {
+    background: #fdecec;
+    border: 1.5px solid #d64545;
+    color: #b73232;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 13.5px;
+    font-weight: bold;
+    margin-bottom: 12px;
+  }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { background: #eef3f0; color: #4a6b5d; font-size: 12.5px; padding: 5px 12px; border-radius: 999px; }
+  .next-memo { background: #fdf3ec; border-radius: 10px; padding: 11px 12px; font-size: 13.5px; line-height: 1.7; }
+
+  .visit {
+    border-left: 3px solid #d8d2c8;
+    padding: 2px 0 12px 12px;
+    margin-left: 4px;
+    position: relative;
+  }
+  .visit::before {
+    content: "";
+    position: absolute;
+    left: -7px; top: 6px;
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    background: #4a6b5d;
+  }
+  .visit .date { font-size: 12px; color: #a09585; }
+  .visit .menu { font-size: 14.5px; font-weight: bold; margin: 2px 0; }
+  .visit .detail { font-size: 13px; color: #6b6259; line-height: 1.6; white-space: pre-wrap; }
+  .visit .price { font-size: 13px; color: #c96f4a; font-weight: bold; }
+  .visit .del-visit { margin-top: 6px; font-size: 11.5px; color: #a09585; background: none; border: none; cursor: pointer; text-decoration: underline; }
+  .photo-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .photo-row img {
+    width: 84px; height: 112px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1.5px solid #d8d2c8;
+  }
+
+  #overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.9);
+    z-index: 20;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  #overlay.show { display: flex; }
+  #overlay img { max-width: 96%; max-height: 92%; border-radius: 8px; }
+
+  .start-box { text-align: center; padding: 40px 20px; }
+  .start-box h2 { font-size: 18px; color: #4a6b5d; margin-bottom: 14px; border: none; padding: 0; }
+  .start-box p { font-size: 14px; line-height: 1.9; color: #6b6259; margin-bottom: 20px; }
+  .note {
+    text-align: center;
+    font-size: 12px;
+    color: #a09585;
+    background: #fff;
+    border: 1.5px dashed #c4bbae;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 16px;
+    line-height: 1.7;
+  }
+  .view { display: none; }
+  .view.active { display: block; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Raco 電子カルテ</h1>
+  <span id="saveStatus"></span>
+</header>
+<main>
+
+  <!-- ===== 起動画面 ===== -->
+  <div class="view active" id="startView">
+    <div class="panel start-box">
+      <h2>カルテを開く</h2>
+      <p>下のボタンを押して、カルテの保存フォルダを選んでください。<br>
+      はじめての場合は<br><b>「OneDrive → ドキュメント → Racoカルテ」</b><br>を選べばOKです。</p>
+      <button class="btn-main w100" id="openBtn" style="font-size:17px; padding:16px;">📂 カルテのフォルダを開く</button>
+      <p class="note" id="startNote">データはこのパソコンのOneDriveフォルダにだけ保存されます。<br>インターネット上には公開されません。</p>
+    </div>
+  </div>
+
+  <!-- ===== 一覧画面 ===== -->
+  <div class="view" id="listView">
+    <button class="btn-main btn-accent w100" id="newCustBtn" style="margin-bottom:12px;">＋ 新しいお客様のカルテを作る</button>
+    <input class="search" id="searchBox" type="text" placeholder="お名前で検索（漢字・ひらがなどちらでも）">
+    <p class="count" id="countLabel"></p>
+    <div id="custList"></div>
+  </div>
+
+  <!-- ===== 詳細画面 ===== -->
+  <div class="view" id="detailView">
+    <button class="back" data-goto="list">← 一覧にもどる</button>
+    <div id="detailBody"></div>
+  </div>
+
+  <!-- ===== お客様情報 登録・編集画面 ===== -->
+  <div class="view" id="custFormView">
+    <button class="back" data-goto="cancelForm">← 保存せずにもどる</button>
+    <div class="panel">
+      <h2 id="custFormTitle">お客様情報</h2>
+      <div class="f-grid">
+        <div class="f-item"><label>氏名 *</label><input id="cName" type="text"></div>
+        <div class="f-item"><label>ふりがな</label><input id="cKana" type="text"></div>
+        <div class="f-item"><label>電話番号</label><input id="cTel" type="text"></div>
+        <div class="f-item"><label>年代</label>
+          <select id="cAge"><option></option><option>10代以下</option><option>20代</option><option>30代</option><option>40代</option><option>50代</option><option>60代</option><option>70代以上</option></select>
+        </div>
+        <div class="f-item"><label>性別</label>
+          <select id="cGender"><option>女性</option><option>男性</option></select>
+        </div>
+        <div class="f-item"><label>初回来店日</label><input id="cFirst" type="date"></div>
+        <div class="f-item full"><label>⚠ 要注意（アレルギー・体調など。施術前に必ず見る情報）</label><input id="cAlert" type="text" placeholder="例：カラー剤で頭皮がしみやすい（低刺激使用）"></div>
+        <div class="f-item full"><label>髪の情報（タップで選択）</label>
+          <div class="chips" id="hairChips"></div>
+        </div>
+        <div class="f-item full"><label>次回に向けてのメモ</label><textarea id="cNext" placeholder="例：次回プレミアム縮毛矯正を提案／木曜午前の来店希望"></textarea></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-main grow" id="saveCustBtn">保存する</button>
+        <button class="btn-danger" id="delCustBtn" style="display:none;">このカルテを削除</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 施術記録 追加画面 ===== -->
+  <div class="view" id="visitFormView">
+    <button class="back" data-goto="detail">← 保存せずにもどる</button>
+    <div class="panel">
+      <h2 id="visitFormTitle">施術を記録する</h2>
+      <div class="f-grid">
+        <div class="f-item"><label>施術日</label><input id="vDate" type="date"></div>
+        <div class="f-item"><label>金額（円・数字だけ）</label><input id="vPrice" type="number" placeholder="例：4400"></div>
+        <div class="f-item full"><label>メニュー（タップで選択）</label>
+          <div class="chips" id="menuChips"></div>
+          <input id="vMenuFree" type="text" placeholder="その他・補足（例：前髪カットも）" style="margin-top:8px; padding:10px 11px; font-size:15px; border:2px solid #d8d2c8; border-radius:8px; background:#fdfcfa;">
+        </div>
+        <div class="f-item full"><label>施術メモ（薬剤・調合・お客様の様子など）</label><textarea id="vDetail" placeholder="例：N-6でリタッチ。前回より半トーン明るく。頭皮保護オイル使用。"></textarea></div>
+        <div class="f-item full"><label>写真（何枚でもOK）</label><input id="vPhotos" type="file" accept="image/*" multiple></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-main grow" id="saveVisitBtn">この施術を記録する</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div id="overlay"><img id="overlayImg" alt="拡大写真"></div>
+
+<script>
+"use strict";
+
+// ================= 設定 =================
+const DATA_FILE = "カルテデータ.json";
+const PHOTO_DIR = "写真";
+const BACKUP_DIR = "バックアップ";
+const HAIR_TAGS = ["軟毛","普通","硬毛","直毛","ややくせ","くせ強","毛量少","毛量多",
+                   "白髪30%","白髪50%","白髪70%","白髪90%","自然乾燥派","コテ・アイロン使用"];
+const MENUS = ["カット","カット＋白髪染め","カット＋カラー","髪質改善トリートメント",
+               "カット＋髪質改善Tr","縮毛矯正","プレミアム縮毛矯正","メンズカット"];
+
+let dirHandle = null;
+let data = { version: 1, customers: [] };
+let currentId = null;      // 表示中のお客様ID
+let editingId = null;      // 編集中のお客様ID（新規はnull）
+let backupDoneToday = false;
+
+// ================= 画面切り替え =================
+const VIEWS = ["startView", "listView", "detailView", "custFormView", "visitFormView"];
+function show(id) {
+  VIEWS.forEach(v => document.getElementById(v).classList.toggle("active", v === id));
+  window.scrollTo(0, 0);
+}
+document.querySelectorAll(".back").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const g = btn.dataset.goto;
+    if (g === "list") { renderList(); show("listView"); }
+    else if (g === "detail" ) { showDetail(currentId); }
+    else if (g === "cancelForm") {
+      if (editingId) { showDetail(editingId); } else { renderList(); show("listView"); }
+    }
+  });
+});
+
+// ================= フォルダの記憶（IndexedDB） =================
+function idb() {
+  return new Promise((ok, ng) => {
+    const req = indexedDB.open("raco-karte", 1);
+    req.onupgradeneeded = () => req.result.createObjectStore("kv");
+    req.onsuccess = () => ok(req.result);
+    req.onerror = () => ng(req.error);
+  });
+}
+async function kvSet(key, val) {
+  const db = await idb();
+  return new Promise((ok, ng) => {
+    const tx = db.transaction("kv", "readwrite");
+    tx.objectStore("kv").put(val, key);
+    tx.oncomplete = ok; tx.onerror = () => ng(tx.error);
+  });
+}
+async function kvGet(key) {
+  const db = await idb();
+  return new Promise((ok, ng) => {
+    const tx = db.transaction("kv", "readonly");
+    const rq = tx.objectStore("kv").get(key);
+    rq.onsuccess = () => ok(rq.result); rq.onerror = () => ng(rq.error);
+  });
+}
+
+// ================= ファイル保存・読み込み =================
+async function loadData() {
+  try {
+    const fh = await dirHandle.getFileHandle(DATA_FILE);
+    const file = await fh.getFile();
+    data = JSON.parse(await file.text());
+    if (!Array.isArray(data.customers)) data.customers = [];
+  } catch (e) {
+    data = { version: 1, customers: [] };  // 初回：ファイルなし
+  }
+}
+async function saveData() {
+  setStatus("保存中…");
+  try {
+    if (!backupDoneToday) await makeBackup();
+    const fh = await dirHandle.getFileHandle(DATA_FILE, { create: true });
+    const w = await fh.createWritable();
+    await w.write(JSON.stringify(data, null, 1));
+    await w.close();
+    setStatus("✅ 保存済み");
+  } catch (e) {
+    setStatus("⚠ 保存できませんでした");
+    alert("保存に失敗しました。もう一度お試しください。\n" + e.message);
+  }
+}
+async function makeBackup() {
+  try {
+    const fh = await dirHandle.getFileHandle(DATA_FILE);   // 既存データがある場合のみ
+    const file = await fh.getFile();
+    const text = await file.text();
+    const bdir = await dirHandle.getDirectoryHandle(BACKUP_DIR, { create: true });
+    const d = new Date();
+    const name = `カルテデータ_${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}.json`;
+    const bfh = await bdir.getFileHandle(name, { create: true });
+    const w = await bfh.createWritable();
+    await w.write(text);
+    await w.close();
+  } catch (e) { /* 初回はデータファイルが無いのでスキップ */ }
+  backupDoneToday = true;
+}
+function setStatus(t) { document.getElementById("saveStatus").textContent = t; }
+
+async function savePhoto(custId, file) {
+  const pdir = await dirHandle.getDirectoryHandle(PHOTO_DIR, { create: true });
+  const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+  const name = `${custId}_${Date.now()}_${Math.floor(Math.random()*1000)}.${ext}`;
+  const fh = await pdir.getFileHandle(name, { create: true });
+  const w = await fh.createWritable();
+  await w.write(await file.arrayBuffer());
+  await w.close();
+  return name;
+}
+async function photoURL(name) {
+  try {
+    const pdir = await dirHandle.getDirectoryHandle(PHOTO_DIR);
+    const fh = await pdir.getFileHandle(name);
+    return URL.createObjectURL(await fh.getFile());
+  } catch (e) { return null; }
+}
+
+// ================= 起動 =================
+document.getElementById("openBtn").addEventListener("click", async () => {
+  if (!window.showDirectoryPicker) {
+    alert("このブラウザでは使えません。Microsoft Edge か Google Chrome で開いてください。");
+    return;
+  }
+  try {
+    let handle = await kvGet("dir");
+    if (handle) {
+      const p = await handle.requestPermission({ mode: "readwrite" });
+      if (p !== "granted") handle = null;
+    }
+    if (!handle) {
+      handle = await window.showDirectoryPicker({ mode: "readwrite" });
+      await kvSet("dir", handle);
+    }
+    dirHandle = handle;
+    await loadData();
+    renderList();
+    show("listView");
+    setStatus("✅ 保存済み");
+  } catch (e) {
+    if (e.name !== "AbortError") alert("フォルダを開けませんでした：" + e.message);
+  }
+});
+
+// ================= 一覧 =================
+function renderList() {
+  const q = document.getElementById("searchBox").value.trim();
+  const hits = data.customers
+    .filter(c => !q || (c.name || "").includes(q) || (c.kana || "").includes(q))
+    .sort((a, b) => (b.updatedAt || "").localeCompare(a.updatedAt || ""));
+
+  document.getElementById("countLabel").textContent =
+    `登録：${data.customers.length}名` + (q ? `／該当：${hits.length}名` : "");
+
+  document.getElementById("custList").innerHTML = hits.map(c => `
+    <div class="cust" data-id="${c.id}">
+      <div class="info">
+        <h3>${esc(c.name)}${c.alert ? '<span class="alert-dot">注意</span>' : ""}</h3>
+        <div class="kana">${esc(c.kana || "")}${c.age ? "・" + c.age : ""}${c.gender ? "・" + c.gender : ""}</div>
+        <div class="last">${c.visits.length ? `前回：${c.visits[0].date}（${esc(c.visits[0].menu)}）` : "施術記録なし"}</div>
+      </div>
+      <div class="arrow">›</div>
+    </div>`).join("")
+    || '<p style="text-align:center;color:#a09585;font-size:13px;padding:24px 0">まだカルテがありません。<br>「＋新しいお客様のカルテを作る」から始めてください。</p>';
+
+  document.querySelectorAll(".cust").forEach(el => {
+    el.addEventListener("click", () => showDetail(el.dataset.id));
+  });
+}
+document.getElementById("searchBox").addEventListener("input", renderList);
+
+function esc(s) {
+  return String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+// ================= 詳細 =================
+async function showDetail(id) {
+  const c = data.customers.find(x => x.id === id);
+  if (!c) { renderList(); show("listView"); return; }
+  currentId = id;
+
+  document.getElementById("detailBody").innerHTML = `
+    ${c.alert ? `<div class="alert-box">⚠ ${esc(c.alert)}</div>` : ""}
+    <div class="panel">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div>
+          <div class="prof-name">${esc(c.name)}</div>
+          <div class="prof-kana">${esc(c.kana || "")}</div>
+        </div>
+        <button class="btn-sub" id="editCustBtn" style="padding:9px 14px; font-size:13px;">✏ 編集</button>
+      </div>
+      <div class="prof-row"><span class="lbl">年代・性別</span><span>${c.age || "-"}・${c.gender || "-"}</span></div>
+      <div class="prof-row"><span class="lbl">電話</span><span>${esc(c.tel) || "-"}</span></div>
+      <div class="prof-row"><span class="lbl">初回来店</span><span>${c.first || "-"}</span></div>
+      <div class="prof-row"><span class="lbl">来店回数</span><span>${c.visits.length}回</span></div>
+    </div>
+    <div class="panel">
+      <h2>髪の情報</h2>
+      <div class="tags">${(c.hair || []).map(t => `<span class="tag">${esc(t)}</span>`).join("") || '<span style="font-size:13px;color:#a09585">未登録（✏編集から追加できます）</span>'}</div>
+    </div>
+    <div class="panel">
+      <h2>次回に向けてのメモ</h2>
+      <div class="next-memo">${esc(c.nextMemo) || "（メモなし）"}</div>
+    </div>
+    <div class="panel">
+      <h2>施術履歴</h2>
+      <button class="btn-main btn-accent w100" id="addVisitBtn" style="margin-bottom:14px;">＋ 今日の施術を記録する</button>
+      <div id="visitList">
+      ${c.visits.map((v, vi) => `
+        <div class="visit">
+          <div class="date">${v.date}</div>
+          <div class="menu">${esc(v.menu)}${v.price ? `<span class="price">　¥${Number(v.price).toLocaleString()}</span>` : ""}</div>
+          <div class="detail">${esc(v.detail)}</div>
+          <div class="photo-row" data-vi="${vi}"></div>
+          <button class="del-visit" data-vi="${vi}">この記録を削除</button>
+        </div>`).join("") || '<p style="font-size:13px;color:#a09585">まだ施術記録がありません</p>'}
+      </div>
+    </div>
+  `;
+
+  document.getElementById("editCustBtn").addEventListener("click", () => openCustForm(id));
+  document.getElementById("addVisitBtn").addEventListener("click", () => openVisitForm());
+  document.querySelectorAll(".del-visit").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const vi = Number(btn.dataset.vi);
+      if (!confirm(`${c.visits[vi].date} の施術記録を削除しますか？`)) return;
+      c.visits.splice(vi, 1);
+      c.updatedAt = new Date().toISOString();
+      await saveData();
+      showDetail(id);
+    });
+  });
+
+  show("detailView");
+
+  // 写真を読み込み（あとから非同期で）
+  for (const [vi, v] of c.visits.entries()) {
+    if (!v.photos || !v.photos.length) continue;
+    const row = document.querySelector(`.photo-row[data-vi="${vi}"]`);
+    if (!row) continue;
+    for (const name of v.photos) {
+      const url = await photoURL(name);
+      if (!url) continue;
+      const img = document.createElement("img");
+      img.src = url;
+      img.alt = "施術写真";
+      img.addEventListener("click", () => {
+        document.getElementById("overlayImg").src = url;
+        document.getElementById("overlay").classList.add("show");
+      });
+      row.appendChild(img);
+    }
+  }
+}
+
+document.getElementById("overlay").addEventListener("click", () => {
+  document.getElementById("overlay").classList.remove("show");
+});
+
+// ================= お客様フォーム =================
+function buildChips(containerId, options, selected) {
+  const box = document.getElementById(containerId);
+  box.innerHTML = "";
+  options.forEach(t => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.textContent = t;
+    if (selected && selected.includes(t)) b.classList.add("on");
+    b.addEventListener("click", () => b.classList.toggle("on"));
+    box.appendChild(b);
+  });
+}
+function chipValues(containerId) {
+  return [...document.querySelectorAll(`#${containerId} button.on`)].map(b => b.textContent);
+}
+
+function openCustForm(id) {
+  editingId = id || null;
+  const c = id ? data.customers.find(x => x.id === id) : null;
+  document.getElementById("custFormTitle").textContent = c ? "お客様情報の編集" : "新しいお客様のカルテ";
+  document.getElementById("cName").value = c ? c.name : "";
+  document.getElementById("cKana").value = c ? (c.kana || "") : "";
+  document.getElementById("cTel").value = c ? (c.tel || "") : "";
+  document.getElementById("cAge").value = c ? (c.age || "") : "";
+  document.getElementById("cGender").value = c ? (c.gender || "女性") : "女性";
+  document.getElementById("cFirst").value = c ? (c.first || "") : new Date().toISOString().slice(0, 10);
+  document.getElementById("cAlert").value = c ? (c.alert || "") : "";
+  document.getElementById("cNext").value = c ? (c.nextMemo || "") : "";
+  buildChips("hairChips", HAIR_TAGS, c ? c.hair : []);
+  document.getElementById("delCustBtn").style.display = c ? "block" : "none";
+  show("custFormView");
+}
+
+document.getElementById("newCustBtn").addEventListener("click", () => openCustForm(null));
+
+document.getElementById("saveCustBtn").addEventListener("click", async () => {
+  const name = document.getElementById("cName").value.trim();
+  if (!name) { alert("氏名を入力してください"); return; }
+  const now = new Date().toISOString();
+  let c;
+  if (editingId) {
+    c = data.customers.find(x => x.id === editingId);
+  } else {
+    c = { id: "c" + Date.now(), visits: [], createdAt: now };
+    data.customers.push(c);
+  }
+  c.name = name;
+  c.kana = document.getElementById("cKana").value.trim();
+  c.tel = document.getElementById("cTel").value.trim();
+  c.age = document.getElementById("cAge").value;
+  c.gender = document.getElementById("cGender").value;
+  c.first = document.getElementById("cFirst").value;
+  c.alert = document.getElementById("cAlert").value.trim();
+  c.hair = chipValues("hairChips");
+  c.nextMemo = document.getElementById("cNext").value.trim();
+  c.updatedAt = now;
+  await saveData();
+  showDetail(c.id);
+});
+
+document.getElementById("delCustBtn").addEventListener("click", async () => {
+  const c = data.customers.find(x => x.id === editingId);
+  if (!c) return;
+  if (!confirm(`「${c.name}」様のカルテを削除しますか？\nこの操作は元に戻せません（バックアップフォルダには残ります）。`)) return;
+  data.customers = data.customers.filter(x => x.id !== editingId);
+  await saveData();
+  renderList();
+  show("listView");
+});
+
+// ================= 施術記録フォーム =================
+function openVisitForm() {
+  const c = data.customers.find(x => x.id === currentId);
+  document.getElementById("visitFormTitle").textContent = `施術を記録する（${c.name} 様）`;
+  document.getElementById("vDate").value = new Date().toISOString().slice(0, 10);
+  document.getElementById("vPrice").value = "";
+  document.getElementById("vMenuFree").value = "";
+  document.getElementById("vDetail").value = "";
+  document.getElementById("vPhotos").value = "";
+  buildChips("menuChips", MENUS, []);
+  // メニューは1つ選択に
+  document.querySelectorAll("#menuChips button").forEach(b => {
+    b.addEventListener("click", () => {
+      if (b.classList.contains("on")) {
+        document.querySelectorAll("#menuChips button").forEach(x => { if (x !== b) x.classList.remove("on"); });
+      }
+    });
+  });
+  show("visitFormView");
+}
+
+document.getElementById("saveVisitBtn").addEventListener("click", async () => {
+  const c = data.customers.find(x => x.id === currentId);
+  if (!c) return;
+  const menuSel = chipValues("menuChips")[0] || "";
+  const menuFree = document.getElementById("vMenuFree").value.trim();
+  const menu = [menuSel, menuFree].filter(Boolean).join(" ");
+  if (!menu) { alert("メニューを選ぶか入力してください"); return; }
+
+  setStatus("保存中…");
+  const photoNames = [];
+  const files = document.getElementById("vPhotos").files;
+  try {
+    for (const f of files) photoNames.push(await savePhoto(c.id, f));
+  } catch (e) {
+    alert("写真の保存に失敗しました：" + e.message);
+  }
+
+  c.visits.unshift({
+    date: document.getElementById("vDate").value,
+    menu,
+    price: document.getElementById("vPrice").value,
+    detail: document.getElementById("vDetail").value.trim(),
+    photos: photoNames,
+  });
+  c.updatedAt = new Date().toISOString();
+  await saveData();
+  showDetail(c.id);
+});
+</script>
+</body>
+</html>
