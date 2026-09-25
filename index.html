@@ -375,8 +375,8 @@ nav a:hover::after { transform: scaleX(1); }
     text-align: right;
 }
 
-/* ════ M301/P401 GRID ════ */
-.m301-p401-grid {
+/* ════ HOME CARE GRID ════ */
+.homecare-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
@@ -1508,7 +1508,7 @@ footer {
     /* フッター */
     footer { padding: 40px 22px 28px; grid-template-columns: 1fr; gap: 24px; }
 
-    /* 使い方フロー（M301→P401→仕上がり） */
+    /* 使い方フロー（STEP1→STEP2→仕上がり） */
     .steps-flow {
         display: flex !important;
         flex-direction: column !important;
@@ -1518,8 +1518,8 @@ footer {
     .steps-flow > div:nth-child(even) { display: none !important; }
     .steps-flow > div:nth-child(odd) { text-align: center; width: 100%; }
 
-    /* M301/P401カード縦並び */
-    .m301-p401-grid {
+    /* ホームケアカード縦並び */
+    .homecare-grid {
         grid-template-columns: 1fr !important;
     }
 }
@@ -1902,7 +1902,7 @@ footer {
       </div>
 
       <!-- 2カード -->
-      <div class="m301-p401-grid" style="gap:2px;background:var(--line);margin-bottom:2px;">
+      <div class="homecare-grid" style="gap:2px;background:var(--line);margin-bottom:2px;">
 
         <div class="armada-card card-m fade-in">
           <div class="armada-card-code">STEP 1</div>
