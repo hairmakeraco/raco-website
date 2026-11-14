@@ -154,7 +154,7 @@ footer{margin-top:26px;font-size:11px;color:var(--ink-3);line-height:1.7;text-al
 <header>
   <div class="brand">
     <h1><span class="en">HITA</span> 調合ナビ</h1>
-    <span class="sub">現場版 ／ 在庫5本</span>
+    <span class="sub">現場版 ／ 在庫4本</span>
   </div>
 </header>
 
@@ -210,7 +210,7 @@ footer{margin-top:26px;font-size:11px;color:var(--ink-3);line-height:1.7;text-al
       <div class="label">ベース剤</div>
       <div class="seg wide" id="segCalcBase">
         <button type="button" data-v="6.2" aria-pressed="true">コスメ8.7<br>6.2</button>
-        <button type="button" data-v="9.5" aria-pressed="false">STH・EX<br>9.5</button>
+        <button type="button" data-v="9.5" aria-pressed="false">STH<br>9.5</button>
       </div>
     </div>
     <div class="field">
@@ -301,7 +301,6 @@ footer{margin-top:26px;font-size:11px;color:var(--ink-3);line-height:1.7;text-al
 var P = {
   cos :{n:"コスメ 8.7",        c:"var(--p-cos)"},
   hard:{n:"フォーミュラ STH",  c:"var(--p-hard)"},
-  exh :{n:"EX ハード",         c:"var(--p-hard)"},
   ser :{n:"リブーターセラムX", c:"var(--p-serum)"}
 };
 
@@ -328,14 +327,12 @@ function recipeNew(lv, curl){
   if(lv===1){
     if(curl<=2) return cs("5:1","バージン毛の弱いクセ。減力して硬くしない。");
     if(curl===3) return cs("1:0","コスメ9.0（アルカリが強い）には上げない。");
-    if(curl===4) return {parts:[{k:"hard",w:1}], ph:9.0, est:false, tg:9.5,
+    return {parts:[{k:"hard",w:1}], ph:9.0, est:false, tg:9.5,
       note:"バージン毛の強いクセ。STH（還元力9.5）の出番。前処理のセラムXは必ず入れる。"};
-    return {parts:[{k:"exh",w:1}], ph:9.2, est:false, tg:9.5,
-      note:"バージン毛の頑固なクセ限定。EXハードは在庫で一番強い薬（還元力はSTHと同じ9.5、アルカリはSTHより強い）。<b>カラー履歴が少しでもあればSTHに下げる。</b>前処理のセラムXは必ず入れる。"};
   }
   if(lv===2){
     if(curl<=2) return cs("5:1");
-    return cs("1:0", curl>=4 ? "クセが強くてもEXハード・STH・コスメ9.0には上げない。ダメージが天井。" : null);
+    return cs("1:0", curl>=4 ? "クセが強くてもSTH・コスメ9.0には上げない。ダメージが天井。" : null);
   }
   if(lv===3){
     if(curl<=2) return cs("2:1","アルカリを抑えられます。"+TRADEOFF);
